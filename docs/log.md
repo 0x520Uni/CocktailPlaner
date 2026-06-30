@@ -66,3 +66,4 @@ Skip: single-line edits, typo fixes, reformatting.
 | 2026-06-30 | IMPL | HIGH | ADR-002 Load-Disclaimer + Glossar Name-Suche (search.php) + ADR-008 aktualisiert + ADR-009 withdrawn |
 | 2026-06-30 | DOCS | MEDIUM | Projektbericht docs/report.md erstellt (Präsentation 16.7.) |
 | 2026-06-30 | IMPL | HIGH | GitHub Repo + GitHub Pages deployed: https://github.com/0x520Uni/CocktailPlaner |
+| 2026-06-30 | DOCS | MEDIUM | README.md erstellt: Projektstruktur + Agent-Harness-Erklärung (.claude/, Hooks, /deploy Skill) |
