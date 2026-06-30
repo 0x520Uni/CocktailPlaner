@@ -27,7 +27,7 @@ Lokaler Server: `http://localhost:8765/` — immer `/` laden, dann per Navbar na
 | Dokument | Inhalt |
 |---|---|
 | [docs/report.md](docs/report.md) | Projektbericht (Anforderungen, Architektur, Features) |
-| [docs/how-we-worked.md](docs/how-we-worked.md) | Entwicklungsphasen im Überblick |
+| [docs/wie-ich-gearbeitet-habe.md](docs/wie-ich-gearbeitet-habe.md) | Entwicklungsphasen im Überblick |
 | [docs/log.md](docs/log.md) | Work Log (jeder Arbeitsschritt) |
 | [docs/knowledge/](docs/knowledge/) | Wissensbasis-Spiegel (YouTrack → lokal) |
 | [diagrams/](diagrams/) | Mermaid-Quellen + gerenderte PNGs |

@@ -9,9 +9,9 @@ $ARGUMENTS
 
 ---
 
-## Phase 0 — how-we-worked.md aktualisieren
+## Phase 0 — wie-ich-gearbeitet-habe.md aktualisieren
 
-`docs/how-we-worked.md` ist ein narrativer Überblick über die Projektphasen.
+`docs/wie-ich-gearbeitet-habe.md` ist ein narrativer Überblick über die Projektphasen.
 Er wird bei jedem Deploy aus dem aktuellen `docs/log.md` neu generiert.
 
 ### Vorgehen
@@ -19,7 +19,7 @@ Er wird bei jedem Deploy aus dem aktuellen `docs/log.md` neu generiert.
 1. `docs/log.md` vollständig lesen.
 2. Einträge nach zeitlichen Schwerpunkten und inhaltlichen Clustern gruppieren
    (z.B. "Architektur-Entscheidungen", "API-Anbindung", "QA", "Deployment").
-3. `docs/how-we-worked.md` neu schreiben — keine Commit-Liste, sondern Prosa:
+3. `docs/wie-ich-gearbeitet-habe.md` neu schreiben — keine Commit-Liste, sondern Prosa:
    - Was war die Absicht dieser Phase?
    - Welche Weichenstellungen gab es?
    - Was wurde unterwegs geändert und warum?
@@ -148,7 +148,7 @@ Markdown-Docs als PDF daneben ablegen:
 
 ```bash
 npx -y md-to-pdf docs/report.md
-npx -y md-to-pdf docs/how-we-worked.md
+npx -y md-to-pdf docs/wie-ich-gearbeitet-habe.md
 ```
 
 Ergebnis: `docs/report.pdf`, `docs/how-we-worked.pdf`
