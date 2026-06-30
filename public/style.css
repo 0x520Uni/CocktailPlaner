@@ -201,3 +201,248 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ===========================================================================
+   Motion & micro-interactions  (CSS-only — no Elm/view changes)
+   ---------------------------------------------------------------------------
+   A playful motion layer added purely on top of the existing Bulma markup.
+   It works without touching any .elm file because CSS @keyframes fire when an
+   element is first painted: entrance animations play once on load/mount, and
+   Elm's virtual-DOM keeps persistent elements so they do NOT re-animate on
+   every keystroke. Modals animate each time they open (they mount on open).
+
+   Shared "playful" overshoot easing used throughout:
+       cubic-bezier(.34, 1.56, .64, 1)
+   Colours/shadows stay in the existing family (#3273dc, 12px radius).
+
+   Everything decorative lives inside `prefers-reduced-motion: no-preference`
+   so users who ask for less motion get a calm, static UI (see the bottom).
+   =========================================================================== */
+
+/* ---- Reusable keyframes -------------------------------------------------- */
+
+/* Entrance: fade + rise + slight overshoot, for cards. */
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Entrance: plain fade, for backdrops. */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Entrance: rise + fade, for table rows. */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Entrance: zoom in with a bouncy overshoot, for modal cards. */
+@keyframes zoom-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Signature: the glass "fills up" from the bottom (clipped layers scale in). */
+@keyframes pour {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Idle bob, for the empty-state cocktail emoji. */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Quick rotate wiggle, for the navbar brand on hover. */
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-7deg);
+  }
+  75% {
+    transform: rotate(7deg);
+  }
+}
+
+/* Gentle breathing pulse, for loading/info notifications. */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.015);
+  }
+}
+
+/* ---- Applied motion (only when the user allows motion) ------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Event cards: cascading entrance + a springy hover lift.
+     .card is used only for event cards here — modals use .modal-card and the
+     Glossar media tiles use .media-card, so this selector stays scoped. */
+  .card {
+    animation: pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  /* Stagger the first few cards so the list reveals as a cascade. */
+  .card:nth-child(1) {
+    animation-delay: 0.02s;
+  }
+  .card:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .card:nth-child(3) {
+    animation-delay: 0.14s;
+  }
+  .card:nth-child(4) {
+    animation-delay: 0.2s;
+  }
+  .card:nth-child(5) {
+    animation-delay: 0.26s;
+  }
+  .card:nth-child(n + 6) {
+    animation-delay: 0.32s;
+  }
+
+  .card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  }
+
+  /* Buttons: tactile press + slight hover lift. */
+  .button {
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .button:hover {
+    transform: translateY(-1px);
+  }
+  .button:active {
+    transform: scale(0.95);
+  }
+
+  /* Navbar brand: a quick playful wiggle on hover. */
+  .navbar-brand:hover {
+    animation: wiggle 0.4s ease-in-out;
+  }
+
+  /* Modals: blurred backdrop + bouncy zoom-in. Re-fires every time a dialog
+     opens because the modal element mounts on open. */
+  .modal-background {
+    animation: fade-in 0.25s ease;
+    backdrop-filter: blur(3px);
+  }
+  .modal-card,
+  .modal .box {
+    animation: zoom-bounce-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  /* Tables: subtle staggered row reveal + a slide-on-hover. */
+  .table tbody tr {
+    animation: fade-in-up 0.35s ease both;
+    transition: transform 0.12s ease, background-color 0.12s ease;
+  }
+  .table tbody tr:nth-child(1) {
+    animation-delay: 0.03s;
+  }
+  .table tbody tr:nth-child(2) {
+    animation-delay: 0.06s;
+  }
+  .table tbody tr:nth-child(3) {
+    animation-delay: 0.09s;
+  }
+  .table tbody tr:nth-child(4) {
+    animation-delay: 0.12s;
+  }
+  .table tbody tr:nth-child(n + 5) {
+    animation-delay: 0.15s;
+  }
+  .table tbody tr:hover {
+    transform: translateX(3px);
+  }
+
+  /* Inline-edit inputs: add a soft focus glow on top of the existing
+     border-color transition (declared above). */
+  .inline-edit-name:focus,
+  .inline-edit-number:focus {
+    box-shadow: 0 2px 6px -2px rgba(50, 115, 220, 0.5);
+  }
+
+  /* Empty state: the cocktail emoji gently bobs to feel alive. */
+  .event-empty-icon {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Signature effect: the proportion glass "pours" — the clipped colour layers
+     scale up from the bottom edge so the drink appears to fill the glass.
+     transform-box: fill-box makes transform-origin resolve against the group's
+     own bounding box rather than the SVG canvas origin. */
+  .media-frame svg g[clip-path] {
+    transform-box: fill-box;
+    transform-origin: bottom;
+    animation: pour 0.7s ease-out both;
+  }
+
+  /* Loading / info notifications: a slow breathing pulse so async states read
+     as "working" rather than frozen. */
+  .notification.is-info,
+  .notification.is-warning {
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+/* ---- Reduced-motion: keep hover affordances, drop the rest --------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .table tbody tr,
+  .modal-background,
+  .modal-card,
+  .modal .box,
+  .media-frame svg g[clip-path],
+  .event-empty-icon,
+  .notification.is-info,
+  .notification.is-warning,
+  .navbar-brand:hover {
+    animation: none !important;
+  }
+}

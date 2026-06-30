@@ -68,3 +68,9 @@ Skip: single-line edits, typo fixes, reformatting.
 | 2026-06-30 | IMPL | HIGH | GitHub Repo + GitHub Pages deployed: https://github.com/0x520Uni/CocktailPlaner |
 | 2026-06-30 | DOCS | MEDIUM | README.md erstellt: Projektstruktur + Agent-Harness-Erklärung (.claude/, Hooks, /deploy Skill) |
 | 2026-06-30 | REFACTOR | HIGH | Agent Harness 3-Schichten-Modell: CLAUDE.md lean, .claude/rules/ (always/ui/kb), /verify + /kb-sync Skills, .claude/README.md |
+| 2026-06-30 | IMPL | MEDIUM | Updated /deploy skill: KB review+mirror phase before build |
+| 2026-06-30 | DOCS | MEDIUM | Created docs/how-we-worked.md: high-level development phase overview |
+| 2026-06-30 | IMPL | MEDIUM | Deploy Phase 0: how-we-worked.md regenerated from log.md at every deploy |
+| 2026-06-30 | DOCS | MEDIUM | README.md rewritten: lean pointer-doc to all project artifacts |
+| 2026-06-30 | IMPL | HIGH | Created diagrams/ with 5 Mermaid diagrams; deploy Phase 2 renders PNG+PDF |
+| 2026-06-30 | IMPL | MEDIUM | Playful CSS-only motion layer in style.css (card lift, modal bounce+blur, SVG pour, navbar wiggle, floating empty-state); no Elm changes, prefers-reduced-motion respected |

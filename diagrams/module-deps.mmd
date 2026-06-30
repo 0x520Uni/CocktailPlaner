@@ -1,0 +1,28 @@
+---
+title: Modulabhängigkeiten
+---
+graph TD
+    Main["<b>Main.elm</b><br/>Browser.application<br/>init · update · view"]
+    Types["<b>Types.elm</b><br/>Model · Msg · Event<br/>Ingredient · Route · Dialog"]
+    Route["<b>Route.elm</b><br/>fromUrl · toPath"]
+    Api["<b>Api.elm</b><br/>HTTP · JSON Decoder<br/>parseMeasureToAmount"]
+    Codec["<b>Codec.elm</b><br/>encodeToString · parseState"]
+    Topbar["<b>View/Topbar.elm</b><br/>Burger · Nav-Links"]
+    Home["<b>View/Home.elm</b><br/>Event-Cards · Suche"]
+    Shopping["<b>View/Shopping.elm</b><br/>Einkaufsliste · Packungen"]
+    Glossar["<b>View/Glossar.elm</b><br/>3-Spalten-Modal"]
+    SVG["<b>View/CocktailSvg.elm</b><br/>SVG-Glas · Farbschichten"]
+
+    Main --> Types & Route & Api & Codec
+    Main --> Topbar & Home & Shopping & Glossar
+
+    Route --> Types
+    Api --> Types
+    Codec --> Types
+    Topbar --> Types & Route
+    Home --> Types
+    Shopping --> Types
+    Glossar --> Types & SVG
+
+    style Main fill:#4a90d9,color:#fff
+    style Types fill:#f5a623,color:#fff

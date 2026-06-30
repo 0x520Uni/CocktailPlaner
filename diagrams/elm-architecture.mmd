@@ -1,0 +1,35 @@
+---
+title: Elm Architecture — Datenfluss
+---
+flowchart TD
+    Browser["Browser<br/>(Klick · Eingabe · URL)"]
+    HTTP["HTTP Response<br/>TheCocktailDB"]
+
+    Msg["Msg<br/>(UrlChanged · GotCategories<br/>SaveEvent · SetPortions · ...)"]
+
+    Update["<b>update</b><br/>Msg → Model → (Model, Cmd Msg)"]
+
+    Model["<b>Model</b><br/>route · events · categories<br/>cocktailCache · dialogs · ..."]
+
+    Cmd["Cmd Msg<br/>(Http.get · Nav.pushUrl<br/>File.download · ...)"]
+
+    View["<b>view</b><br/>Model → Html Msg"]
+
+    DOM["HTML / SVG<br/>im Browser"]
+
+    TheCocktailDB["TheCocktailDB API"]
+
+    Browser -->|"user event"| Msg
+    HTTP --> Msg
+    Msg --> Update
+    Update --> Model
+    Update --> Cmd
+    Model --> View
+    View --> DOM
+    DOM -->|"click / input"| Browser
+    Cmd --> TheCocktailDB
+    TheCocktailDB --> HTTP
+
+    style Update fill:#4a90d9,color:#fff
+    style Model fill:#f5a623,color:#fff
+    style View fill:#48c774,color:#fff

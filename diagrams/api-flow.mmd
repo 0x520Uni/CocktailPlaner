@@ -1,0 +1,33 @@
+---
+title: TheCocktailDB API — Aufrufsequenz
+---
+sequenceDiagram
+    actor Nutzer
+    participant Elm as Elm (update)
+    participant Api as Api.elm
+    participant DB as TheCocktailDB
+
+    Nutzer->>Elm: Glossar öffnen
+    Elm->>Api: fetchCategories
+    Api->>DB: GET /list.php?c=list
+    DB-->>Api: ["Cocktail","Beer","Shot",...]
+    Api-->>Elm: GotCategories (Ok [...])
+
+    Nutzer->>Elm: Kategorie wählen
+    Elm->>Api: fetchCocktailsByCategory "Cocktail"
+    Api->>DB: GET /filter.php?c=Cocktail
+    DB-->>Api: [{idDrink, strDrink, strDrinkThumb},...]
+    Api-->>Elm: GotCocktailSummaries "Cocktail" (Ok [...])
+
+    Nutzer->>Elm: Cocktail wählen
+    Elm->>Api: fetchCocktailById "11007"
+    Api->>DB: GET /lookup.php?i=11007
+    DB-->>Api: FullCocktail (name,ingredients,measures,instructions)
+    Api-->>Elm: GotFullCocktail (Ok cocktail)
+
+    Note over Elm,DB: Suche nach Name (Glossar + Event-Suche)
+    Nutzer->>Elm: Name eingeben + suchen
+    Elm->>Api: searchCocktailsByName "margar"
+    Api->>DB: GET /search.php?s=margar
+    DB-->>Api: [FullCocktail,...]
+    Api-->>Elm: GotGlossarSearchResults (Ok [...])

@@ -1,0 +1,24 @@
+---
+title: SPA Routing
+---
+flowchart LR
+    URL["Browser URL"]
+    fromUrl["Route.fromUrl"]
+    NR["NavigateTo Route<br/>(Msg)"]
+
+    URL --> fromUrl
+    NR -->|"Nav.pushUrl"| URL
+
+    fromUrl --> HR["HomeRoute<br/><code>/</code>"]
+    fromUrl --> SR["ShoppingRoute<br/><code>/shopping</code>"]
+    fromUrl --> GR["GlossarRoute<br/><code>/glossar</code>"]
+
+    HR --> VH["View.Home<br/>Event-Verwaltung"]
+    SR --> VS["View.Shopping<br/>Einkaufsliste"]
+    GR --> VG["View.Glossar<br/>3-Spalten-Modal"]
+
+    Navbar["Topbar<br/>(Navbar-Klick)"] --> NR
+
+    style HR fill:#48c774,color:#fff
+    style SR fill:#3273dc,color:#fff
+    style GR fill:#9b59b6,color:#fff

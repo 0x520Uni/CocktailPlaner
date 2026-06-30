@@ -2,4 +2,5 @@ elm-stuff/
 .playwright-mcp/
 .vscode/
 *.png
+!diagrams/*.png
 TEST_REPORT.md

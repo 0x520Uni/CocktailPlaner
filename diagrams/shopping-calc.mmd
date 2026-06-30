@@ -1,0 +1,33 @@
+---
+title: Einkaufslisten-Berechnung
+---
+flowchart TD
+    Event["Event<br/>guestCount · portions<br/>cocktails: List EventCocktail"]
+
+    Cocktail["EventCocktail<br/>FullCocktail · portions"]
+
+    Ingredients["Zutaten-Rohwerte<br/>name: String<br/>measure: String<br/>(z.B. '2 oz', '1/2 tsp', '6-8 cl')"]
+
+    Parse["<b>parseMeasureToAmount</b><br/>in Api.elm<br/>oz → ml · cl → ml<br/>tsp → ml · Brüche + Bereiche"]
+
+    Amount["IngredientAmount<br/>amount: Float (ml)<br/>unit: String"]
+
+    Multiply["× portions × guestCount"]
+
+    Aggregate["Aggregation<br/>Σ aller Events<br/>Dict String Float (ml)"]
+
+    PackageSize["PackageSize Dropdown<br/>Nutzerwahl: ml pro Flasche/Packung"]
+
+    Result["Einkaufsliste<br/>Zutat · ml gesamt<br/>Anzahl Packungen · Restmenge"]
+
+    Event --> Cocktail
+    Cocktail --> Ingredients
+    Ingredients --> Parse
+    Parse --> Amount
+    Amount --> Multiply
+    Multiply --> Aggregate
+    Aggregate --> PackageSize
+    PackageSize --> Result
+
+    style Parse fill:#4a90d9,color:#fff
+    style Result fill:#48c774,color:#fff
