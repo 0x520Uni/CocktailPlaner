@@ -1,0 +1,7 @@
+elm-stuff/
+.playwright-mcp/
+.claude/
+.vscode/
+.mcp.json
+*.png
+TEST_REPORT.md
