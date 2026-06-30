@@ -131,5 +131,5 @@ Der Parser `parseMeasureToAmount` in `Api.elm` erkennt gemischte Zahlen (`1 1/2`
 
 ---
 
-*Quellcode:* `https://github.com/[repo-url]`  
-*Live-Demo:* `http://localhost:8765/` (lokal) / `[deploy-url]` (online)
+*Quellcode:* https://github.com/0x520Uni/CocktailPlaner  
+*Live-Demo:* https://0x520uni.github.io/CocktailPlaner/
