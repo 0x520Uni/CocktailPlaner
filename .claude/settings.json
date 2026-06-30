@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__playwright",
+      "mcp__playwright__browser_network_requests",
+      "Bash(elm make *)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__*",
+      "mcp__playwright__browser_press_key"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$lf = 'c:\\Users\\Henry\\wkspaces\\CocktailPlaner\\docs\\log.md'; $n = if (Test-Path $lf) { (Get-Content $lf).Count } else { 0 }; Set-Content \"$env:TEMP\\cocktailplaner-logcheck.txt\" $n",
+            "shell": "powershell",
+            "statusMessage": "Recording log.md baseline..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$lf = 'c:\\Users\\Henry\\wkspaces\\CocktailPlaner\\docs\\log.md'; $cf = \"$env:TEMP\\cocktailplaner-logcheck.txt\"; if ((Test-Path $cf) -and (Test-Path $lf)) { $old = [int](Get-Content $cf); $new = (Get-Content $lf).Count; if ($new -le $old) { Write-Output '{\"continue\":false,\"stopReason\":\"MANDATORY (CLAUDE.md): docs/log.md was not updated this session. Add a log entry now if any significant action was taken (file created/edited, config changed, feature work, etc.). Skip only for single-line edits, typo fixes, reformatting, or pure chat with no tool use.\"}' } }",
+            "shell": "powershell",
+            "statusMessage": "Checking work log..."
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  }
+}
