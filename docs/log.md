@@ -75,3 +75,4 @@ Skip: single-line edits, typo fixes, reformatting.
 | 2026-06-30 | IMPL | HIGH | Created diagrams/ with 5 Mermaid diagrams; deploy Phase 2 renders PNG+PDF |
 | 2026-06-30 | IMPL | MEDIUM | Playful CSS-only motion layer in style.css (card lift, modal bounce+blur, SVG pour, navbar wiggle, floating empty-state); no Elm changes, prefers-reduced-motion respected |
 | 2026-06-30 | IMPL | HIGH | Deploy: Mermaid PNGs + PDF exports + how-we-worked regen |
+| 2026-06-30 | DOCS | LOW | Rename how-we-worked → wie-ich-gearbeitet-habe, rewrite to first person |
