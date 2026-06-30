@@ -67,3 +67,4 @@ Skip: single-line edits, typo fixes, reformatting.
 | 2026-06-30 | DOCS | MEDIUM | Projektbericht docs/report.md erstellt (Präsentation 16.7.) |
 | 2026-06-30 | IMPL | HIGH | GitHub Repo + GitHub Pages deployed: https://github.com/0x520Uni/CocktailPlaner |
 | 2026-06-30 | DOCS | MEDIUM | README.md erstellt: Projektstruktur + Agent-Harness-Erklärung (.claude/, Hooks, /deploy Skill) |
+| 2026-06-30 | REFACTOR | HIGH | Agent Harness 3-Schichten-Modell: CLAUDE.md lean, .claude/rules/ (always/ui/kb), /verify + /kb-sync Skills, .claude/README.md |
