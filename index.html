@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CocktailPlaner</title>
+
+    <!-- Bulma 0.9.4 — CSS framework (ADR-0006) -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+
+    <!-- Font Awesome 6.5.0 — icon library for navbar and buttons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- Animate.css 4.1.1 — animation utility classes (ADR-0006) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <!-- App-specific styles: responsive breakpoints for the Glossar modal -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Elm mounts here -->
+    <div id="app"></div>
+
+    <script src="main.js"></script>
+    <script>
+      Elm.Main.init({ node: document.getElementById("app") });
+    </script>
+  </body>
+</html>

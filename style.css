@@ -1,0 +1,203 @@
+/* App-specific styles for the Glossar modal: detail-panel layout + responsive breakpoints. */
+
+/* ---------------------------------------------------------------------------
+   Detail panel (column 3)
+   --------------------------------------------------------------------------- */
+
+/* Cap the reading width so content does not stretch into a wide, hard-to-read
+   band on large monitors. */
+.cocktail-detail {
+  max-width: 820px;
+}
+
+/* Photo and proportion SVG side by side as a matched pair of framed cards. */
+.cocktail-media {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* A framed media card: soft gradient mat, rounded corners, subtle shadow.
+   Fixed height so the photo card and the SVG card align top and bottom. */
+.media-card {
+  display: flex;
+  flex-direction: column;
+  height: 320px;
+  border: 1px solid #e7ebf0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #fafbfc 0%, #eef1f5 100%);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* Small uppercase label at the top of each card ("FOTO" / "VERHÄLTNIS"). */
+.media-caption {
+  padding: 10px 14px 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8a93a2;
+}
+
+/* Centres the photo/SVG inside the card and lets it shrink to fit.
+   min-height: 0 is required so the flex child may shrink below its content size,
+   which is what lets object-fit: contain work inside a fixed-height card. */
+.media-frame {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+/* Show the whole drink (contain, never crop); cap to the frame. */
+.media-frame img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+/* The SVG scales to the card height; width follows its aspect ratio. */
+.media-frame svg {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+}
+
+/* Ingredient tags: wrap neatly and align the coloured dot with the text. */
+.tags .tag {
+  align-items: center;
+}
+
+/* ---------------------------------------------------------------------------
+   Navbar action buttons (Speichern, Laden, Glossar)
+   Bulma's .button class handles appearance; this adds the pointer cursor that
+   browsers do not set on <button> elements by default.
+   --------------------------------------------------------------------------- */
+
+.navbar .button {
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------------------------
+   Card footer action buttons
+   Bulma's card-footer-item is designed for <a> elements. We use <button> instead
+   to avoid triggering Elm's Browser.application link interceptor (which reloads the
+   page when it sees an <a> without href). This resets button defaults to match
+   Bulma's card-footer-item link appearance.
+   --------------------------------------------------------------------------- */
+
+.card-footer-btn {
+  background: none;
+  border: none;
+  border-left: 1px solid #dbdbdb;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  color: #3273dc;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.card-footer-btn:first-child {
+  border-left: none;
+}
+
+.card-footer-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.card-footer-btn.has-text-danger {
+  color: #f14668;
+}
+
+/* Event name in card: truncate with ellipsis so long names don't overflow. */
+.card-event-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Inline-edit inputs (Home page — event detail header)
+   Inputs that look like plain text until the user focuses them.
+   --------------------------------------------------------------------------- */
+
+/* Event name: styled like a Bulma .title.is-5 heading. */
+.inline-edit-name {
+  display: block;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  outline: none;
+  padding: 0 0 2px 0;
+  font-family: inherit;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #363636;
+  transition: border-color 0.15s;
+}
+
+/* Guest count: same behaviour, narrower, normal weight. */
+.inline-edit-number {
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  outline: none;
+  padding: 0 0 2px 0;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #363636;
+  width: 5rem;
+  transition: border-color 0.15s;
+}
+
+.inline-edit-name:hover,
+.inline-edit-name:focus,
+.inline-edit-number:hover,
+.inline-edit-number:focus {
+  border-bottom-color: #3273dc; /* Bulma primary blue */
+}
+
+/* ---------------------------------------------------------------------------
+   Event empty state (right column when no event is selected)
+   --------------------------------------------------------------------------- */
+
+.event-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 320px;
+  opacity: 0.35;
+}
+
+.event-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Responsive breakpoints
+   --------------------------------------------------------------------------- */
+
+/* Tablet portrait and below: hide the category and cocktail-list columns so the
+   detail column (column 3) fills the full modal width. */
+@media (max-width: 900px) {
+  .glossar-col-categories,
+  .glossar-col-list {
+    display: none !important;
+  }
+}
+
+/* Phone: stack the photo and SVG cards vertically instead of side by side. */
+@media (max-width: 500px) {
+  .cocktail-media {
+    grid-template-columns: 1fr !important;
+  }
+}
