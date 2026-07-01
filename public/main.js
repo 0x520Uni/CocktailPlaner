@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.ab.I === region.ag.I)
+	if (region.ab.J === region.ag.J)
 	{
-		return 'on line ' + region.ab.I;
+		return 'on line ' + region.ab.J;
 	}
-	return 'on lines ' + region.ab.I + ' through ' + region.ag.I;
+	return 'on lines ' + region.ab.J + ' through ' + region.ag.J;
 }
 
 
@@ -1857,7 +1857,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.a1,
+		impl.a0,
 		impl.bi,
 		impl.bf,
 		function() { return function() {} }
@@ -3943,7 +3943,7 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.a1,
+		impl.a0,
 		impl.bi,
 		impl.bf,
 		function(sendToApp, initialModel) {
@@ -3979,7 +3979,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.a1,
+		impl.a0,
 		impl.bi,
 		impl.bf,
 		function(sendToApp, initialModel) {
@@ -3992,7 +3992,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aR);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aQ);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
@@ -4053,8 +4053,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.a6;
-	var onUrlRequest = impl.a7;
+	var onUrlChange = impl.a5;
+	var onUrlRequest = impl.a6;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -4074,9 +4074,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.aw === next.aw
+							&& curr.av === next.av
 							&& curr.am === next.am
-							&& curr.at.a === next.at.a
+							&& curr.as.a === next.as.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4084,9 +4084,9 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		a1: function(flags)
+		a0: function(flags)
 		{
-			return A3(impl.a1, flags, _Browser_getUrl(), key);
+			return A3(impl.a0, flags, _Browser_getUrl(), key);
 		},
 		bj: impl.bj,
 		bi: impl.bi,
@@ -4156,17 +4156,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aZ: 'hidden', aS: 'visibilitychange' }
+		? { aY: 'hidden', aR: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aZ: 'mozHidden', aS: 'mozvisibilitychange' }
+		? { aY: 'mozHidden', aR: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aZ: 'msHidden', aS: 'msvisibilitychange' }
+		? { aY: 'msHidden', aR: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aZ: 'webkitHidden', aS: 'webkitvisibilitychange' }
-		: { aZ: 'hidden', aS: 'visibilitychange' };
+		? { aY: 'webkitHidden', aR: 'webkitvisibilitychange' }
+		: { aY: 'hidden', aR: 'visibilitychange' };
 }
 
 
@@ -4247,11 +4247,11 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aC: _Browser_getScene(),
-		aJ: {
-			aL: _Browser_window.pageXOffset,
-			aM: _Browser_window.pageYOffset,
-			aK: _Browser_doc.documentElement.clientWidth,
+		aB: _Browser_getScene(),
+		aI: {
+			aK: _Browser_window.pageXOffset,
+			aL: _Browser_window.pageYOffset,
+			aJ: _Browser_doc.documentElement.clientWidth,
 			al: _Browser_doc.documentElement.clientHeight
 		}
 	};
@@ -4262,7 +4262,7 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		aK: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		aJ: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
 		al: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
@@ -4286,14 +4286,14 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aC: {
-				aK: node.scrollWidth,
+			aB: {
+				aJ: node.scrollWidth,
 				al: node.scrollHeight
 			},
-			aJ: {
-				aL: node.scrollLeft,
-				aM: node.scrollTop,
-				aK: node.clientWidth,
+			aI: {
+				aK: node.scrollLeft,
+				aL: node.scrollTop,
+				aJ: node.clientWidth,
 				al: node.clientHeight
 			}
 		};
@@ -4324,17 +4324,17 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aC: _Browser_getScene(),
-			aJ: {
-				aL: x,
-				aM: y,
-				aK: _Browser_doc.documentElement.clientWidth,
+			aB: _Browser_getScene(),
+			aI: {
+				aK: x,
+				aL: y,
+				aJ: _Browser_doc.documentElement.clientWidth,
 				al: _Browser_doc.documentElement.clientHeight
 			},
-			aW: {
-				aL: x + rect.left,
-				aM: y + rect.top,
-				aK: rect.width,
+			aV: {
+				aK: x + rect.left,
+				aL: y + rect.top,
+				aJ: rect.width,
 				al: rect.height
 			}
 		};
@@ -4380,25 +4380,25 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.R.a(response)));
+			callback(toTask(request.S.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.R.b, xhr)); });
-		$elm$core$Maybe$isJust(request.aI) && _Http_track(router, xhr, request.aI.a);
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.S.b, xhr)); });
+		$elm$core$Maybe$isJust(request.aH) && _Http_track(router, xhr, request.aH.a);
 
 		try {
-			xhr.open(request.a4, request.U, true);
+			xhr.open(request.a3, request.U, true);
 		} catch (e) {
 			return done($elm$http$Http$BadUrl_(request.U));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		request.aR.a && xhr.setRequestHeader('Content-Type', request.aR.a);
-		xhr.send(request.aR.b);
+		request.aQ.a && xhr.setRequestHeader('Content-Type', request.aQ.a);
+		xhr.send(request.aQ.b);
 
 		return function() { xhr.c = true; xhr.abort(); };
 	});
@@ -4414,8 +4414,8 @@ function _Http_configureRequest(xhr, request)
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
 	xhr.timeout = request.bg.a || 0;
-	xhr.responseType = request.R.d;
-	xhr.withCredentials = request.aO;
+	xhr.responseType = request.S.d;
+	xhr.withCredentials = request.aN;
 }
 
 
@@ -4535,14 +4535,14 @@ function _Http_track(router, xhr, tracker)
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
 			bc: event.loaded,
-			aE: event.total
+			aD: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
 			ba: event.loaded,
-			aE: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
+			aD: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
 }
@@ -5072,7 +5072,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {aj: fragment, am: host, ar: path, at: port_, aw: protocol, ax: query};
+		return {aj: fragment, am: host, a8: path, as: port_, av: protocol, aw: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5353,6 +5353,7 @@ var $elm$core$Task$perform = F2(
 var $elm$browser$Browser$application = _Browser_application;
 var $author$project$Types$CategoriesNotLoaded = {$: 0};
 var $author$project$Types$NoDialog = 0;
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Dict$RBEmpty_elm_builtin = {$: -2};
 var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
 var $author$project$Types$GotCategories = function (a) {
@@ -5984,7 +5985,7 @@ var $elm$http$Http$Request = function (a) {
 };
 var $elm$http$Http$State = F2(
 	function (reqs, subs) {
-		return {az: reqs, aF: subs};
+		return {ay: reqs, aE: subs};
 	});
 var $elm$http$Http$init = $elm$core$Task$succeed(
 	A2($elm$http$Http$State, $elm$core$Dict$empty, _List_Nil));
@@ -6028,7 +6029,7 @@ var $elm$http$Http$updateReqs = F3(
 					return A2(
 						$elm$core$Task$andThen,
 						function (pid) {
-							var _v4 = req.aI;
+							var _v4 = req.aH;
 							if (_v4.$ === 1) {
 								return A3($elm$http$Http$updateReqs, router, otherCmds, reqs);
 							} else {
@@ -6058,7 +6059,7 @@ var $elm$http$Http$onEffects = F4(
 				return $elm$core$Task$succeed(
 					A2($elm$http$Http$State, reqs, subs));
 			},
-			A3($elm$http$Http$updateReqs, router, cmds, state.az));
+			A3($elm$http$Http$updateReqs, router, cmds, state.ay));
 	});
 var $elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
@@ -6101,7 +6102,7 @@ var $elm$http$Http$onSelfMsg = F3(
 				A2(
 					$elm$core$List$filterMap,
 					A3($elm$http$Http$maybeSend, router, tracker, progress),
-					state.aF)));
+					state.aE)));
 	});
 var $elm$http$Http$Cancel = function (a) {
 	return {$: 0, a: a};
@@ -6115,13 +6116,13 @@ var $elm$http$Http$cmdMap = F2(
 			var r = cmd.a;
 			return $elm$http$Http$Request(
 				{
-					aO: r.aO,
-					aR: r.aR,
-					R: A2(_Http_mapExpect, func, r.R),
+					aN: r.aN,
+					aQ: r.aQ,
+					S: A2(_Http_mapExpect, func, r.S),
 					ak: r.ak,
-					a4: r.a4,
+					a3: r.a3,
 					bg: r.bg,
-					aI: r.aI,
+					aH: r.aH,
 					U: r.U
 				});
 		}
@@ -6145,18 +6146,17 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{aO: false, aR: r.aR, R: r.R, ak: r.ak, a4: r.a4, bg: r.bg, aI: r.aI, U: r.U}));
+			{aN: false, aQ: r.aQ, S: r.S, ak: r.ak, a3: r.a3, bg: r.bg, aH: r.aH, U: r.U}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{aR: $elm$http$Http$emptyBody, R: r.R, ak: _List_Nil, a4: 'GET', bg: $elm$core$Maybe$Nothing, aI: $elm$core$Maybe$Nothing, U: r.U});
+		{aQ: $elm$http$Http$emptyBody, S: r.S, ak: _List_Nil, a3: 'GET', bg: $elm$core$Maybe$Nothing, aH: $elm$core$Maybe$Nothing, U: r.U});
 };
 var $author$project$Api$fetchCategories = $elm$http$Http$get(
 	{
-		R: A2($elm$http$Http$expectJson, $author$project$Types$GotCategories, $author$project$Api$categoriesDecoder),
+		S: A2($elm$http$Http$expectJson, $author$project$Types$GotCategories, $author$project$Api$categoriesDecoder),
 		U: 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list'
 	});
-var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$fetchCategoriesIfNeeded = F2(
 	function (route, model) {
@@ -6185,7 +6185,7 @@ var $author$project$Main$fetchCategoriesIfNeeded = F2(
 var $author$project$Types$HomeRoute = 0;
 var $elm$url$Url$Parser$State = F5(
 	function (visited, unvisited, params, frag, value) {
-		return {v: frag, w: params, u: unvisited, p: value, y: visited};
+		return {v: frag, w: params, u: unvisited, q: value, y: visited};
 	});
 var $elm$url$Url$Parser$getFirstMatch = function (states) {
 	getFirstMatch:
@@ -6197,10 +6197,10 @@ var $elm$url$Url$Parser$getFirstMatch = function (states) {
 			var rest = states.b;
 			var _v1 = state.u;
 			if (!_v1.b) {
-				return $elm$core$Maybe$Just(state.p);
+				return $elm$core$Maybe$Just(state.q);
 			} else {
 				if ((_v1.a === '') && (!_v1.b.b)) {
-					return $elm$core$Maybe$Just(state.p);
+					return $elm$core$Maybe$Just(state.q);
 				} else {
 					var $temp$states = rest;
 					states = $temp$states;
@@ -6297,8 +6297,8 @@ var $elm$url$Url$Parser$parse = F2(
 				A5(
 					$elm$url$Url$Parser$State,
 					_List_Nil,
-					$elm$url$Url$Parser$preparePath(url.ar),
-					$elm$url$Url$Parser$prepareQuery(url.ax),
+					$elm$url$Url$Parser$preparePath(url.a8),
+					$elm$url$Url$Parser$prepareQuery(url.aw),
 					url.aj,
 					$elm$core$Basics$identity)));
 	});
@@ -6311,7 +6311,7 @@ var $elm$url$Url$Parser$mapState = F2(
 		var unvisited = _v0.u;
 		var params = _v0.w;
 		var frag = _v0.v;
-		var value = _v0.p;
+		var value = _v0.q;
 		return A5(
 			$elm$url$Url$Parser$State,
 			visited,
@@ -6328,7 +6328,7 @@ var $elm$url$Url$Parser$map = F2(
 			var unvisited = _v1.u;
 			var params = _v1.w;
 			var frag = _v1.v;
-			var value = _v1.p;
+			var value = _v1.q;
 			return A2(
 				$elm$core$List$map,
 				$elm$url$Url$Parser$mapState(value),
@@ -6369,7 +6369,7 @@ var $elm$url$Url$Parser$s = function (str) {
 		var unvisited = _v0.u;
 		var params = _v0.w;
 		var frag = _v0.v;
-		var value = _v0.p;
+		var value = _v0.q;
 		if (!unvisited.b) {
 			return _List_Nil;
 		} else {
@@ -6414,19 +6414,58 @@ var $elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
+var $author$project$Route$parse = function (url) {
+	return A2(
+		$elm$url$Url$Parser$parse,
+		$author$project$Route$parser,
+		_Utils_update(
+			url,
+			{
+				aj: $elm$core$Maybe$Nothing,
+				a8: A2($elm$core$Maybe$withDefault, '', url.aj)
+			}));
+};
 var $author$project$Route$fromUrl = function (url) {
 	return A2(
 		$elm$core$Maybe$withDefault,
 		0,
-		A2($elm$url$Url$Parser$parse, $author$project$Route$parser, url));
+		$author$project$Route$parse(url));
 };
+var $elm$browser$Browser$Navigation$replaceUrl = _Browser_replaceUrl;
+var $author$project$Route$toPath = function (route) {
+	switch (route) {
+		case 0:
+			return '#/';
+		case 1:
+			return '#/shopping';
+		default:
+			return '#/glossar';
+	}
+};
+var $author$project$Main$redirectUnknownToHome = F2(
+	function (key, url) {
+		var _v0 = $author$project$Route$parse(url);
+		if (!_v0.$) {
+			return $elm$core$Platform$Cmd$none;
+		} else {
+			return A2(
+				$elm$browser$Browser$Navigation$replaceUrl,
+				key,
+				$author$project$Route$toPath(0));
+		}
+	});
 var $author$project$Main$init = F3(
 	function (_v0, url, key) {
 		var startRoute = $author$project$Route$fromUrl(url);
-		var initialModel = {m: 0, g: $elm$core$Maybe$Nothing, O: false, n: $elm$core$Dict$empty, D: $author$project$Types$CategoriesNotLoaded, r: $elm$core$Dict$empty, E: $elm$core$Maybe$Nothing, P: '10', Q: '', F: '', G: _List_Nil, ai: _List_Nil, S: _List_Nil, H: '', T: key, J: $elm$core$Maybe$Nothing, ao: 1, aq: $elm$core$Dict$empty, Y: startRoute, Z: '', aD: $elm$core$Maybe$Nothing, _: $elm$core$Maybe$Nothing};
+		var initialModel = {n: 0, g: $elm$core$Maybe$Nothing, P: false, o: $elm$core$Dict$empty, D: $author$project$Types$CategoriesNotLoaded, j: $elm$core$Dict$empty, E: $elm$core$Maybe$Nothing, Q: '10', R: '', F: '', G: _List_Nil, ai: _List_Nil, T: _List_Nil, H: '', I: key, K: $elm$core$Maybe$Nothing, ao: 1, aq: $elm$core$Dict$empty, Y: startRoute, Z: '', aC: $elm$core$Maybe$Nothing, _: $elm$core$Maybe$Nothing};
 		return _Utils_Tuple2(
 			initialModel,
-			A2($author$project$Main$fetchCategoriesIfNeeded, startRoute, initialModel));
+			$elm$core$Platform$Cmd$batch(
+				_List_fromArray(
+					[
+						A2($author$project$Main$fetchCategoriesIfNeeded, startRoute, initialModel),
+						A2($author$project$Main$redirectUnknownToHome, key, url)
+					])));
 	});
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
@@ -6476,7 +6515,7 @@ var $author$project$Types$GotFullCocktail = function (a) {
 };
 var $author$project$Types$FullCocktail = F5(
 	function (id, name, thumbnail, ingredients, instructions) {
-		return {a_: id, a0: ingredients, a2: instructions, a5: name, aH: thumbnail};
+		return {aZ: id, a$: ingredients, a1: instructions, a4: name, aG: thumbnail};
 	});
 var $elm$json$Json$Decode$andThen = _Json_andThen;
 var $elm$json$Json$Decode$decodeValue = _Json_run;
@@ -6768,9 +6807,9 @@ var $author$project$Api$ingredientsDecoder = A2(
 					}();
 					return $elm$core$Maybe$Just(
 						{
-							aP: $author$project$Api$parseMeasureToAmount(measure),
-							a3: measure,
-							a5: $elm$core$String$trim(name)
+							aO: $author$project$Api$parseMeasureToAmount(measure),
+							a2: measure,
+							a4: $elm$core$String$trim(name)
 						});
 				}
 			} else {
@@ -6801,7 +6840,7 @@ var $author$project$Api$fullCocktailDecoder = A2(
 var $author$project$Api$fetchCocktailById = function (id) {
 	return $elm$http$Http$get(
 		{
-			R: A2($elm$http$Http$expectJson, $author$project$Types$GotFullCocktail, $author$project$Api$fullCocktailDecoder),
+			S: A2($elm$http$Http$expectJson, $author$project$Types$GotFullCocktail, $author$project$Api$fullCocktailDecoder),
 			U: 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=' + id
 		});
 };
@@ -6811,7 +6850,7 @@ var $author$project$Types$GotCocktailSummaries = F2(
 	});
 var $author$project$Types$CocktailSummary = F3(
 	function (id, name, thumbnail) {
-		return {a_: id, a5: name, aH: thumbnail};
+		return {aZ: id, a4: name, aG: thumbnail};
 	});
 var $elm$json$Json$Decode$map3 = _Json_map3;
 var $author$project$Api$cocktailSummariesDecoder = A2(
@@ -6828,7 +6867,7 @@ var $elm$url$Url$percentEncode = _Url_percentEncode;
 var $author$project$Api$fetchCocktailsByCategory = function (category) {
 	return $elm$http$Http$get(
 		{
-			R: A2(
+			S: A2(
 				$elm$http$Http$expectJson,
 				$author$project$Types$GotCocktailSummaries(category),
 				$author$project$Api$cocktailSummariesDecoder),
@@ -6846,6 +6885,41 @@ var $elm$core$List$filter = F2(
 			_List_Nil,
 			list);
 	});
+var $elm$core$Set$Set_elm_builtin = $elm$core$Basics$identity;
+var $elm$core$Set$empty = $elm$core$Dict$empty;
+var $elm$core$Set$insert = F2(
+	function (key, _v0) {
+		var dict = _v0;
+		return A3($elm$core$Dict$insert, key, 0, dict);
+	});
+var $elm$core$Set$fromList = function (list) {
+	return A3($elm$core$List$foldl, $elm$core$Set$insert, $elm$core$Set$empty, list);
+};
+var $elm$core$Dict$member = F2(
+	function (key, dict) {
+		var _v0 = A2($elm$core$Dict$get, key, dict);
+		if (!_v0.$) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var $elm$core$Basics$not = _Basics_not;
+var $author$project$Main$fetchMissingRecipes = F2(
+	function (cache, ids) {
+		return $elm$core$Platform$Cmd$batch(
+			A2(
+				$elm$core$List$map,
+				$author$project$Api$fetchCocktailById,
+				$elm$core$Set$toList(
+					$elm$core$Set$fromList(
+						A2(
+							$elm$core$List$filter,
+							function (id) {
+								return !A2($elm$core$Dict$member, id, cache);
+							},
+							ids)))));
+	});
 var $elm$core$Basics$ge = _Utils_ge;
 var $elm$core$List$head = function (list) {
 	if (list.b) {
@@ -6857,17 +6931,7 @@ var $elm$core$List$head = function (list) {
 	}
 };
 var $elm$browser$Browser$Navigation$load = _Browser_load;
-var $elm$core$Dict$member = F2(
-	function (key, dict) {
-		var _v0 = A2($elm$core$Dict$get, key, dict);
-		if (!_v0.$) {
-			return true;
-		} else {
-			return false;
-		}
-	});
 var $elm$core$Basics$neq = _Utils_notEqual;
-var $elm$core$Basics$not = _Basics_not;
 var $author$project$Codec$SavedState = F3(
 	function (events, nextEventId, packageSizes) {
 		return {ai: events, ao: nextEventId, aq: packageSizes};
@@ -6900,11 +6964,11 @@ var $author$project$Codec$dictDecoder = A2(
 	$elm$json$Json$Decode$list($author$project$Codec$pairDecoder));
 var $author$project$Types$Event = F4(
 	function (id, name, guestCount, cocktails) {
-		return {aU: cocktails, aY: guestCount, a_: id, a5: name};
+		return {aT: cocktails, aX: guestCount, aZ: id, a4: name};
 	});
 var $author$project$Types$EventCocktail = F2(
 	function (cocktailId, portions) {
-		return {aT: cocktailId, a9: portions};
+		return {aS: cocktailId, a9: portions};
 	});
 var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $author$project$Codec$eventCocktailDecoder = A3(
@@ -6959,20 +7023,10 @@ var $author$project$Api$searchCocktailsByName = F2(
 	function (query, toMsg) {
 		return $elm$http$Http$get(
 			{
-				R: A2($elm$http$Http$expectJson, toMsg, $author$project$Api$searchResultsDecoder),
+				S: A2($elm$http$Http$expectJson, toMsg, $author$project$Api$searchResultsDecoder),
 				U: 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=' + $elm$url$Url$percentEncode(query)
 			});
 	});
-var $author$project$Route$toPath = function (route) {
-	switch (route) {
-		case 0:
-			return '/';
-		case 1:
-			return '/shopping';
-		default:
-			return '/glossar';
-	}
-};
 var $elm$url$Url$addPort = F2(
 	function (maybePort, starter) {
 		if (maybePort.$ === 1) {
@@ -6995,7 +7049,7 @@ var $elm$url$Url$addPrefixed = F3(
 	});
 var $elm$url$Url$toString = function (url) {
 	var http = function () {
-		var _v0 = url.aw;
+		var _v0 = url.av;
 		if (!_v0) {
 			return 'http://';
 		} else {
@@ -7009,13 +7063,13 @@ var $elm$url$Url$toString = function (url) {
 		A3(
 			$elm$url$Url$addPrefixed,
 			'?',
-			url.ax,
+			url.aw,
 			_Utils_ap(
 				A2(
 					$elm$url$Url$addPort,
-					url.at,
+					url.as,
 					_Utils_ap(http, url.am)),
-				url.ar)));
+				url.a8)));
 };
 var $author$project$Main$update = F2(
 	function (msg, model) {
@@ -7026,8 +7080,13 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{O: false, Y: newRoute}),
-					A2($author$project$Main$fetchCategoriesIfNeeded, newRoute, model));
+						{P: false, Y: newRoute}),
+					$elm$core$Platform$Cmd$batch(
+						_List_fromArray(
+							[
+								A2($author$project$Main$fetchCategoriesIfNeeded, newRoute, model),
+								A2($author$project$Main$redirectUnknownToHome, model.I, url)
+							])));
 			case 1:
 				var request = msg.a;
 				if (!request.$) {
@@ -7036,7 +7095,7 @@ var $author$project$Main$update = F2(
 						model,
 						A2(
 							$elm$browser$Browser$Navigation$pushUrl,
-							model.T,
+							model.I,
 							$elm$url$Url$toString(url)));
 				} else {
 					var href = request.a;
@@ -7049,13 +7108,13 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{m: dialog}),
+						{n: dialog}),
 					$elm$core$Platform$Cmd$none);
 			case 4:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{m: 0, J: $elm$core$Maybe$Nothing}),
+						{n: 0, K: $elm$core$Maybe$Nothing}),
 					$elm$core$Platform$Cmd$none);
 			case 5:
 				var text = msg.a;
@@ -7082,7 +7141,7 @@ var $author$project$Main$update = F2(
 							[
 								A2(
 								$elm$browser$Browser$Navigation$pushUrl,
-								model.T,
+								model.I,
 								$author$project$Route$toPath(route)),
 								A2($author$project$Main$fetchCategoriesIfNeeded, route, model)
 							])));
@@ -7093,15 +7152,29 @@ var $author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{m: 0, g: $elm$core$Maybe$Nothing, ai: saved.ai, H: '', J: $elm$core$Maybe$Nothing, ao: saved.ao, aq: saved.aq}),
-						$elm$core$Platform$Cmd$none);
+							{n: 0, g: $elm$core$Maybe$Nothing, ai: saved.ai, H: '', K: $elm$core$Maybe$Nothing, ao: saved.ao, aq: saved.aq}),
+						A2(
+							$author$project$Main$fetchMissingRecipes,
+							model.j,
+							A2(
+								$elm$core$List$concatMap,
+								A2(
+									$elm$core$Basics$composeR,
+									function ($) {
+										return $.aT;
+									},
+									$elm$core$List$map(
+										function ($) {
+											return $.aS;
+										})),
+								saved.ai)));
 				} else {
 					var errMsg = _v3.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
 							{
-								J: $elm$core$Maybe$Just(errMsg)
+								K: $elm$core$Maybe$Just(errMsg)
 							}),
 						$elm$core$Platform$Cmd$none);
 				}
@@ -7124,15 +7197,15 @@ var $author$project$Main$update = F2(
 				}
 			case 8:
 				var category = msg.a;
-				var alreadyLoaded = A2($elm$core$Dict$member, category, model.n);
+				var alreadyLoaded = A2($elm$core$Dict$member, category, model.o);
 				var fetchCmd = alreadyLoaded ? $elm$core$Platform$Cmd$none : $author$project$Api$fetchCocktailsByCategory(category);
-				var updatedCategories = alreadyLoaded ? model.n : A3($elm$core$Dict$insert, category, $author$project$Types$Loading, model.n);
+				var updatedCategories = alreadyLoaded ? model.o : A3($elm$core$Dict$insert, category, $author$project$Types$Loading, model.o);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
-							n: updatedCategories,
-							aD: $elm$core$Maybe$Just(category)
+							o: updatedCategories,
+							aC: $elm$core$Maybe$Just(category)
 						}),
 					fetchCmd);
 			case 9:
@@ -7143,11 +7216,11 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								n: A3(
+								o: A3(
 									$elm$core$Dict$insert,
 									category,
 									$author$project$Types$Loaded(summaries),
-									model.n)
+									model.o)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -7156,13 +7229,13 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								n: A3($elm$core$Dict$insert, category, $author$project$Types$Failed, model.n)
+								o: A3($elm$core$Dict$insert, category, $author$project$Types$Failed, model.o)
 							}),
 						$elm$core$Platform$Cmd$none);
 				}
 			case 10:
 				var id = msg.a;
-				var alreadyCached = A2($elm$core$Dict$member, id, model.r);
+				var alreadyCached = A2($elm$core$Dict$member, id, model.j);
 				var fetchCmd = alreadyCached ? $elm$core$Platform$Cmd$none : $author$project$Api$fetchCocktailById(id);
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -7178,7 +7251,7 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								r: A3($elm$core$Dict$insert, cocktail.a_, cocktail, model.r)
+								j: A3($elm$core$Dict$insert, cocktail.aZ, cocktail, model.j)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -7192,30 +7265,30 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{m: 3, E: $elm$core$Maybe$Nothing, P: '10', Q: ''}),
+						{n: 3, E: $elm$core$Maybe$Nothing, Q: '10', R: ''}),
 					$elm$core$Platform$Cmd$none);
 			case 13:
 				var name = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{Q: name}),
+						{R: name}),
 					$elm$core$Platform$Cmd$none);
 			case 14:
 				var count = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{P: count}),
+						{Q: count}),
 					$elm$core$Platform$Cmd$none);
 			case 15:
-				var _v4 = model.m;
+				var _v4 = model.n;
 				if (_v4 === 3) {
-					var trimmedName = $elm$core$String$trim(model.Q);
+					var trimmedName = $elm$core$String$trim(model.R);
 					var nameTaken = A2(
 						$elm$core$List$any,
 						function (e) {
-							return _Utils_eq(e.a5, trimmedName);
+							return _Utils_eq(e.a4, trimmedName);
 						},
 						model.ai);
 					var nameEmpty = $elm$core$String$isEmpty(trimmedName);
@@ -7241,18 +7314,18 @@ var $author$project$Main$update = F2(
 							var guestCount = A2(
 								$elm$core$Maybe$withDefault,
 								10,
-								$elm$core$String$toInt(model.P));
+								$elm$core$String$toInt(model.Q));
 							var newEvent = {
-								aU: _List_Nil,
-								aY: A2($elm$core$Basics$max, 1, guestCount),
-								a_: newId,
-								a5: trimmedName
+								aT: _List_Nil,
+								aX: A2($elm$core$Basics$max, 1, guestCount),
+								aZ: newId,
+								a4: trimmedName
 							};
 							return _Utils_Tuple2(
 								_Utils_update(
 									model,
 									{
-										m: 0,
+										n: 0,
 										g: $elm$core$Maybe$Just(newId),
 										E: $elm$core$Maybe$Nothing,
 										ai: _Utils_ap(
@@ -7272,7 +7345,7 @@ var $author$project$Main$update = F2(
 				var newEvents = A2(
 					$elm$core$List$filter,
 					function (e) {
-						return !_Utils_eq(e.a_, eventId);
+						return !_Utils_eq(e.aZ, eventId);
 					},
 					model.ai);
 				var newActiveId = _Utils_eq(
@@ -7280,7 +7353,7 @@ var $author$project$Main$update = F2(
 					$elm$core$Maybe$Just(eventId)) ? A2(
 					$elm$core$Maybe$map,
 					function ($) {
-						return $.a_;
+						return $.aZ;
 					},
 					$elm$core$List$head(newEvents)) : model.g;
 				return _Utils_Tuple2(
@@ -7294,25 +7367,25 @@ var $author$project$Main$update = F2(
 					A2(
 						$elm$core$List$filter,
 						function (e) {
-							return _Utils_eq(e.a_, eventId);
+							return _Utils_eq(e.aZ, eventId);
 						},
 						model.ai));
 				if (!_v5.$) {
 					var event = _v5.a;
-					var baseName = event.a5 + ' (Kopie)';
+					var baseName = event.a4 + ' (Kopie)';
 					var copyCount = $elm$core$List$length(
 						A2(
 							$elm$core$List$filter,
 							function (e) {
-								return A2($elm$core$String$startsWith, baseName, e.a5);
+								return A2($elm$core$String$startsWith, baseName, e.a4);
 							},
 							model.ai));
 					var copyName = (!copyCount) ? baseName : (baseName + (' ' + $elm$core$String$fromInt(copyCount + 1)));
 					var copy = _Utils_update(
 						event,
 						{
-							a_: $elm$core$String$fromInt(model.ao),
-							a5: copyName
+							aZ: $elm$core$String$fromInt(model.ao),
+							a4: copyName
 						});
 					return _Utils_Tuple2(
 						_Utils_update(
@@ -7330,6 +7403,23 @@ var $author$project$Main$update = F2(
 				}
 			case 18:
 				var eventId = msg.a;
+				var cocktailIds = A2(
+					$elm$core$List$concatMap,
+					A2(
+						$elm$core$Basics$composeR,
+						function ($) {
+							return $.aT;
+						},
+						$elm$core$List$map(
+							function ($) {
+								return $.aS;
+							})),
+					A2(
+						$elm$core$List$filter,
+						function (e) {
+							return _Utils_eq(e.aZ, eventId);
+						},
+						model.ai));
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
@@ -7338,7 +7428,7 @@ var $author$project$Main$update = F2(
 							F: '',
 							G: _List_Nil
 						}),
-					$elm$core$Platform$Cmd$none);
+					A2($author$project$Main$fetchMissingRecipes, model.j, cocktailIds));
 			case 19:
 				return _Utils_Tuple2(
 					_Utils_update(
@@ -7351,9 +7441,9 @@ var $author$project$Main$update = F2(
 				var updatedEvents = A2(
 					$elm$core$List$map,
 					function (e) {
-						return _Utils_eq(e.a_, eventId) ? _Utils_update(
+						return _Utils_eq(e.aZ, eventId) ? _Utils_update(
 							e,
-							{a5: newName}) : e;
+							{a4: newName}) : e;
 					},
 					model.ai);
 				return _Utils_Tuple2(
@@ -7367,14 +7457,14 @@ var $author$project$Main$update = F2(
 				var updatedEvents = A2(
 					$elm$core$List$map,
 					function (e) {
-						if (_Utils_eq(e.a_, eventId)) {
+						if (_Utils_eq(e.aZ, eventId)) {
 							var _v6 = $elm$core$String$toInt(countStr);
 							if (!_v6.$) {
 								var n = _v6.a;
 								return _Utils_update(
 									e,
 									{
-										aY: A2($elm$core$Basics$max, 1, n)
+										aX: A2($elm$core$Basics$max, 1, n)
 									});
 							} else {
 								return e;
@@ -7410,14 +7500,14 @@ var $author$project$Main$update = F2(
 						$elm$core$List$foldl,
 						F2(
 							function (c, acc) {
-								return A3($elm$core$Dict$insert, c.a_, c, acc);
+								return A3($elm$core$Dict$insert, c.aZ, c, acc);
 							}),
-						model.r,
+						model.j,
 						cocktails);
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{r: newCache, G: cocktails}),
+							{j: newCache, G: cocktails}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
@@ -7435,7 +7525,7 @@ var $author$project$Main$update = F2(
 					A2($author$project$Api$searchCocktailsByName, query, $author$project$Types$GotGlossarSearchResults)) : _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{S: _List_Nil, Z: query}),
+						{T: _List_Nil, Z: query}),
 					$elm$core$Platform$Cmd$none);
 			case 23:
 				if (!msg.a.$) {
@@ -7444,20 +7534,20 @@ var $author$project$Main$update = F2(
 						$elm$core$List$foldl,
 						F2(
 							function (c, acc) {
-								return A3($elm$core$Dict$insert, c.a_, c, acc);
+								return A3($elm$core$Dict$insert, c.aZ, c, acc);
 							}),
-						model.r,
+						model.j,
 						results);
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{r: newCache, S: results}),
+							{j: newCache, T: results}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{S: _List_Nil}),
+							{T: _List_Nil}),
 						$elm$core$Platform$Cmd$none);
 				}
 			case 27:
@@ -7470,32 +7560,32 @@ var $author$project$Main$update = F2(
 					var updatedEvents = A2(
 						$elm$core$List$map,
 						function (e) {
-							if (_Utils_eq(e.a_, eventId)) {
+							if (_Utils_eq(e.aZ, eventId)) {
 								var alreadyThere = A2(
 									$elm$core$List$any,
 									function (ec) {
-										return _Utils_eq(ec.aT, cocktailId);
+										return _Utils_eq(ec.aS, cocktailId);
 									},
-									e.aU);
+									e.aT);
 								return alreadyThere ? _Utils_update(
 									e,
 									{
-										aU: A2(
+										aT: A2(
 											$elm$core$List$map,
 											function (ec) {
-												return _Utils_eq(ec.aT, cocktailId) ? _Utils_update(
+												return _Utils_eq(ec.aS, cocktailId) ? _Utils_update(
 													ec,
 													{a9: ec.a9 + 1}) : ec;
 											},
-											e.aU)
+											e.aT)
 									}) : _Utils_update(
 									e,
 									{
-										aU: _Utils_ap(
-											e.aU,
+										aT: _Utils_ap(
+											e.aT,
 											_List_fromArray(
 												[
-													{aT: cocktailId, a9: 1}
+													{aS: cocktailId, a9: 1}
 												]))
 									});
 							} else {
@@ -7519,15 +7609,15 @@ var $author$project$Main$update = F2(
 					var updatedEvents = A2(
 						$elm$core$List$map,
 						function (e) {
-							return _Utils_eq(e.a_, eventId) ? _Utils_update(
+							return _Utils_eq(e.aZ, eventId) ? _Utils_update(
 								e,
 								{
-									aU: A2(
+									aT: A2(
 										$elm$core$List$filter,
 										function (ec) {
-											return !_Utils_eq(ec.aT, cocktailId);
+											return !_Utils_eq(ec.aS, cocktailId);
 										},
-										e.aU)
+										e.aT)
 								}) : e;
 						},
 						model.ai);
@@ -7551,20 +7641,42 @@ var $author$project$Main$update = F2(
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{O: !model.O}),
+						{P: !model.P}),
 					$elm$core$Platform$Cmd$none);
 			case 32:
 				var eventId = msg.a;
+				var cocktailIds = A2(
+					$elm$core$List$concatMap,
+					A2(
+						$elm$core$Basics$composeR,
+						function ($) {
+							return $.aT;
+						},
+						$elm$core$List$map(
+							function ($) {
+								return $.aS;
+							})),
+					A2(
+						$elm$core$List$filter,
+						function (e) {
+							return _Utils_eq(e.aZ, eventId);
+						},
+						model.ai));
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
 							g: $elm$core$Maybe$Just(eventId)
 						}),
-					A2(
-						$elm$browser$Browser$Navigation$pushUrl,
-						model.T,
-						$author$project$Route$toPath(1)));
+					$elm$core$Platform$Cmd$batch(
+						_List_fromArray(
+							[
+								A2(
+								$elm$browser$Browser$Navigation$pushUrl,
+								model.I,
+								$author$project$Route$toPath(1)),
+								A2($author$project$Main$fetchMissingRecipes, model.j, cocktailIds)
+							])));
 			default:
 				var cocktailId = msg.a;
 				var newPortions = msg.b;
@@ -7577,17 +7689,17 @@ var $author$project$Main$update = F2(
 					var updatedEvents = A2(
 						$elm$core$List$map,
 						function (e) {
-							return _Utils_eq(e.a_, eventId) ? _Utils_update(
+							return _Utils_eq(e.aZ, eventId) ? _Utils_update(
 								e,
 								{
-									aU: A2(
+									aT: A2(
 										$elm$core$List$map,
 										function (ec) {
-											return _Utils_eq(ec.aT, cocktailId) ? _Utils_update(
+											return _Utils_eq(ec.aS, cocktailId) ? _Utils_update(
 												ec,
 												{a9: safePortions}) : ec;
 										},
-										e.aU)
+										e.aT)
 								}) : e;
 						},
 						model.ai);
@@ -7685,7 +7797,7 @@ var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$textarea = _VirtualDom_node('textarea');
 var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
 var $author$project$Main$loadDialog = function (model) {
-	return (model.m === 2) ? A2(
+	return (model.n === 2) ? A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
@@ -7785,7 +7897,7 @@ var $author$project$Main$loadDialog = function (model) {
 									]),
 								_List_Nil),
 								function () {
-								var _v0 = model.J;
+								var _v0 = model.K;
 								if (!_v0.$) {
 									var errMsg = _v0.a;
 									return A2(
@@ -7917,7 +8029,7 @@ var $author$project$View$Glossar$categoryPanel = function (model) {
 				_List_Nil,
 				A2(
 					$elm$core$List$map,
-					$author$project$View$Glossar$categoryItem(model.aD),
+					$author$project$View$Glossar$categoryItem(model.aC),
 					names));
 	}
 };
@@ -7955,7 +8067,7 @@ var $author$project$View$Glossar$cocktailItem = F2(
 	function (selectedId, summary) {
 		var isActive = _Utils_eq(
 			selectedId,
-			$elm$core$Maybe$Just(summary.a_));
+			$elm$core$Maybe$Just(summary.aZ));
 		var itemClass = isActive ? 'py-1 px-2 has-background-info-light has-text-info' : 'py-1 px-2';
 		return A2(
 			$elm$html$Html$li,
@@ -7966,15 +8078,15 @@ var $author$project$View$Glossar$cocktailItem = F2(
 					A2($elm$html$Html$Attributes$style, 'list-style', 'none'),
 					A2($elm$html$Html$Attributes$style, 'border-radius', '4px'),
 					$elm$html$Html$Events$onClick(
-					$author$project$Types$SelectCocktail(summary.a_))
+					$author$project$Types$SelectCocktail(summary.aZ))
 				]),
 			_List_fromArray(
 				[
-					$elm$html$Html$text(summary.a5)
+					$elm$html$Html$text(summary.a4)
 				]));
 	});
 var $author$project$View$Glossar$cocktailListPanel = function (model) {
-	var _v0 = model.aD;
+	var _v0 = model.aC;
 	if (_v0.$ === 1) {
 		return A2(
 			$elm$html$Html$p,
@@ -7988,7 +8100,7 @@ var $author$project$View$Glossar$cocktailListPanel = function (model) {
 				]));
 	} else {
 		var category = _v0.a;
-		var _v1 = A2($elm$core$Dict$get, category, model.n);
+		var _v1 = A2($elm$core$Dict$get, category, model.o);
 		if (_v1.$ === 1) {
 			return A2(
 				$elm$html$Html$p,
@@ -8040,10 +8152,10 @@ var $author$project$View$Glossar$cocktailListPanel = function (model) {
 	}
 };
 var $author$project$View$Glossar$fullCocktailToSummary = function (c) {
-	return {a_: c.a_, a5: c.a5, aH: c.aH};
+	return {aZ: c.aZ, a4: c.a4, aG: c.aG};
 };
 var $author$project$View$Glossar$searchResultsPanel = function (model) {
-	return $elm$core$List$isEmpty(model.S) ? A2(
+	return $elm$core$List$isEmpty(model.T) ? A2(
 		$elm$html$Html$p,
 		_List_fromArray(
 			[
@@ -8058,7 +8170,7 @@ var $author$project$View$Glossar$searchResultsPanel = function (model) {
 		A2(
 			$elm$core$List$map,
 			$author$project$View$Glossar$cocktailItem(model._),
-			A2($elm$core$List$map, $author$project$View$Glossar$fullCocktailToSummary, model.S)));
+			A2($elm$core$List$map, $author$project$View$Glossar$fullCocktailToSummary, model.T)));
 };
 var $author$project$View$Glossar$columnCocktailList = function (model) {
 	return A2(
@@ -8155,9 +8267,9 @@ var $author$project$View$Glossar$ingredientTag = function (_v0) {
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text(ingredient.a5)
+						$elm$html$Html$text(ingredient.a4)
 					])),
-				$elm$core$String$isEmpty(ingredient.a3) ? $elm$html$Html$text('') : A2(
+				$elm$core$String$isEmpty(ingredient.a2) ? $elm$html$Html$text('') : A2(
 				$elm$html$Html$span,
 				_List_fromArray(
 					[
@@ -8165,7 +8277,7 @@ var $author$project$View$Glossar$ingredientTag = function (_v0) {
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('· ' + ingredient.a3)
+						$elm$html$Html$text('· ' + ingredient.a2)
 					]))
 			]));
 };
@@ -8356,7 +8468,7 @@ var $author$project$View$CocktailSvg$renderLayers = function (triples) {
 								]),
 							_List_fromArray(
 								[
-									$elm$svg$Svg$text(ingredient.a5)
+									$elm$svg$Svg$text(ingredient.a4)
 								]))
 						]) : _List_Nil;
 					var $temp$remaining = rest,
@@ -8389,7 +8501,7 @@ var $author$project$View$CocktailSvg$view = function (ingredients) {
 	var amounts = A2(
 		$elm$core$List$map,
 		function (i) {
-			return $author$project$View$CocktailSvg$parseMeasure(i.a3);
+			return $author$project$View$CocktailSvg$parseMeasure(i.a2);
 		},
 		ingredients);
 	var total = function (t) {
@@ -8480,8 +8592,8 @@ var $author$project$View$CocktailSvg$view = function (ingredients) {
 };
 var $author$project$View$Glossar$cocktailDetail = function (cocktail) {
 	var colors = $author$project$View$CocktailSvg$ingredientColors(
-		$elm$core$List$length(cocktail.a0));
-	var zipped = A3($elm$core$List$map2, $elm$core$Tuple$pair, cocktail.a0, colors);
+		$elm$core$List$length(cocktail.a$));
+	var zipped = A3($elm$core$List$map2, $elm$core$Tuple$pair, cocktail.a$, colors);
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -8498,7 +8610,7 @@ var $author$project$View$Glossar$cocktailDetail = function (cocktail) {
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text(cocktail.a5)
+						$elm$html$Html$text(cocktail.a4)
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -8515,14 +8627,14 @@ var $author$project$View$Glossar$cocktailDetail = function (cocktail) {
 							$elm$html$Html$img,
 							_List_fromArray(
 								[
-									$elm$html$Html$Attributes$src(cocktail.aH),
-									$elm$html$Html$Attributes$alt(cocktail.a5)
+									$elm$html$Html$Attributes$src(cocktail.aG),
+									$elm$html$Html$Attributes$alt(cocktail.a4)
 								]),
 							_List_Nil)),
 						A2(
 						$author$project$View$Glossar$mediaCard,
 						'Verhältnis',
-						$author$project$View$CocktailSvg$view(cocktail.a0))
+						$author$project$View$CocktailSvg$view(cocktail.a$))
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -8589,7 +8701,7 @@ var $author$project$View$Glossar$cocktailDetail = function (cocktail) {
 											]),
 										_List_fromArray(
 											[
-												$elm$html$Html$text(cocktail.a2)
+												$elm$html$Html$text(cocktail.a1)
 											]))
 									]))
 							]))
@@ -8611,7 +8723,7 @@ var $author$project$View$Glossar$detailPanel = function (model) {
 				]));
 	} else {
 		var id = _v0.a;
-		var _v1 = A2($elm$core$Dict$get, id, model.r);
+		var _v1 = A2($elm$core$Dict$get, id, model.j);
 		if (_v1.$ === 1) {
 			return A2(
 				$elm$html$Html$p,
@@ -8816,13 +8928,36 @@ var $elm$html$Html$td = _VirtualDom_node('td');
 var $elm$html$Html$tr = _VirtualDom_node('tr');
 var $author$project$View$Home$cocktailRow = F2(
 	function (model, ec) {
+		var cached = A2($elm$core$Dict$get, ec.aS, model.j);
 		var cocktailName = function () {
-			var _v0 = A2($elm$core$Dict$get, ec.aT, model.r);
-			if (!_v0.$) {
-				var c = _v0.a;
-				return c.a5;
+			if (!cached.$) {
+				var c = cached.a;
+				return c.a4;
 			} else {
-				return ec.aT;
+				return ec.aS;
+			}
+		}();
+		var glassCell = function () {
+			if (!cached.$) {
+				var c = cached.a;
+				return A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row-glass')
+						]),
+					_List_fromArray(
+						[
+							$author$project$View$CocktailSvg$view(c.a$)
+						]));
+			} else {
+				return A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('row-glass row-glass-empty')
+						]),
+					_List_Nil);
 			}
 		}();
 		return A2(
@@ -8830,6 +8965,11 @@ var $author$project$View$Home$cocktailRow = F2(
 			_List_Nil,
 			_List_fromArray(
 				[
+					A2(
+					$elm$html$Html$td,
+					_List_Nil,
+					_List_fromArray(
+						[glassCell])),
 					A2(
 					$elm$html$Html$td,
 					_List_Nil,
@@ -8864,11 +9004,11 @@ var $author$project$View$Home$cocktailRow = F2(
 												[
 													$elm$html$Html$Attributes$class('button is-small'),
 													$elm$html$Html$Events$onClick(
-													A2($author$project$Types$SetPortions, ec.aT, ec.a9 - 1))
+													A2($author$project$Types$SetPortions, ec.aS, ec.a9 - 1))
 												]),
 											_List_fromArray(
 												[
-													$elm$html$Html$text('\u2212')
+													$elm$html$Html$text('−')
 												]))
 										])),
 									A2(
@@ -8892,7 +9032,7 @@ var $author$project$View$Home$cocktailRow = F2(
 													function (s) {
 														return A2(
 															$author$project$Types$SetPortions,
-															ec.aT,
+															ec.aS,
 															A2(
 																$elm$core$Maybe$withDefault,
 																ec.a9,
@@ -8915,7 +9055,7 @@ var $author$project$View$Home$cocktailRow = F2(
 												[
 													$elm$html$Html$Attributes$class('button is-small'),
 													$elm$html$Html$Events$onClick(
-													A2($author$project$Types$SetPortions, ec.aT, ec.a9 + 1))
+													A2($author$project$Types$SetPortions, ec.aS, ec.a9 + 1))
 												]),
 											_List_fromArray(
 												[
@@ -8935,11 +9075,11 @@ var $author$project$View$Home$cocktailRow = F2(
 								[
 									$elm$html$Html$Attributes$class('button is-small is-danger is-light'),
 									$elm$html$Html$Events$onClick(
-									$author$project$Types$RemoveCocktailFromEvent(ec.aT))
+									$author$project$Types$RemoveCocktailFromEvent(ec.aS))
 								]),
 							_List_fromArray(
 								[
-									$elm$html$Html$text('\u00D7')
+									$elm$html$Html$text('×')
 								]))
 						]))
 				]));
@@ -8950,7 +9090,7 @@ var $elm$html$Html$th = _VirtualDom_node('th');
 var $elm$html$Html$thead = _VirtualDom_node('thead');
 var $author$project$View$Home$cocktailListView = F2(
 	function (model, event) {
-		return $elm$core$List$isEmpty(event.aU) ? A2(
+		return $elm$core$List$isEmpty(event.aT) ? A2(
 			$elm$html$Html$p,
 			_List_fromArray(
 				[
@@ -8958,7 +9098,7 @@ var $author$project$View$Home$cocktailListView = F2(
 				]),
 			_List_fromArray(
 				[
-					$elm$html$Html$text('Noch keine Cocktails \u2014 suche unten, um welche hinzuzuf\u00FCgen.')
+					$elm$html$Html$text('Noch keine Cocktails — suche unten, um welche hinzuzufügen.')
 				])) : A2(
 			$elm$html$Html$table,
 			_List_fromArray(
@@ -8977,6 +9117,7 @@ var $author$project$View$Home$cocktailListView = F2(
 							_List_Nil,
 							_List_fromArray(
 								[
+									A2($elm$html$Html$th, _List_Nil, _List_Nil),
 									A2(
 									$elm$html$Html$th,
 									_List_Nil,
@@ -9000,7 +9141,7 @@ var $author$project$View$Home$cocktailListView = F2(
 					A2(
 						$elm$core$List$map,
 						$author$project$View$Home$cocktailRow(model),
-						event.aU))
+						event.aT))
 				]));
 	});
 var $author$project$Types$EventSearchChanged = function (a) {
@@ -9036,7 +9177,7 @@ var $author$project$View$Home$searchResultItem = function (cocktail) {
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text(cocktail.a5)
+						$elm$html$Html$text(cocktail.a4)
 					])),
 				A2(
 				$elm$html$Html$button,
@@ -9044,11 +9185,11 @@ var $author$project$View$Home$searchResultItem = function (cocktail) {
 					[
 						$elm$html$Html$Attributes$class('button is-small is-success is-light'),
 						$elm$html$Html$Events$onClick(
-						$author$project$Types$AddCocktailToEvent(cocktail.a_))
+						$author$project$Types$AddCocktailToEvent(cocktail.aZ))
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('+ Hinzuf\u00FCgen')
+						$elm$html$Html$text('+ Hinzufügen')
 					]))
 			]));
 };
@@ -9087,7 +9228,7 @@ var $author$project$View$Home$cocktailSearchView = function (model) {
 					]),
 				_List_fromArray(
 					[
-						$elm$html$Html$text('Cocktail hinzuf\u00FCgen')
+						$elm$html$Html$text('Cocktail hinzufügen')
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -9111,7 +9252,7 @@ var $author$project$View$Home$cocktailSearchView = function (model) {
 									[
 										$elm$html$Html$Attributes$class('input'),
 										$elm$html$Html$Attributes$type_('text'),
-										$elm$html$Html$Attributes$placeholder('Cocktailname, z. B. Mojito \u2026'),
+										$elm$html$Html$Attributes$placeholder('Cocktailname, z. B. Mojito …'),
 										$elm$html$Html$Attributes$value(model.F),
 										$elm$html$Html$Events$onInput($author$project$Types$EventSearchChanged),
 										A2(
@@ -9188,7 +9329,7 @@ var $author$project$View$Home$detailHeader = function (event) {
 									]),
 								_List_fromArray(
 									[
-										$elm$html$Html$text('Eventname \u270F')
+										$elm$html$Html$text('Eventname ✏')
 									])),
 								A2(
 								$elm$html$Html$input,
@@ -9196,9 +9337,9 @@ var $author$project$View$Home$detailHeader = function (event) {
 									[
 										$elm$html$Html$Attributes$class('inline-edit-name'),
 										$elm$html$Html$Attributes$type_('text'),
-										$elm$html$Html$Attributes$value(event.a5),
+										$elm$html$Html$Attributes$value(event.a4),
 										$elm$html$Html$Events$onInput(
-										$author$project$Types$SetEventName(event.a_))
+										$author$project$Types$SetEventName(event.aZ))
 									]),
 								_List_Nil)
 							])),
@@ -9212,7 +9353,7 @@ var $author$project$View$Home$detailHeader = function (event) {
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('\u00D7')
+								$elm$html$Html$text('×')
 							]))
 					])),
 				A2(
@@ -9231,7 +9372,7 @@ var $author$project$View$Home$detailHeader = function (event) {
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('G\u00E4ste \u270F')
+								$elm$html$Html$text('Gäste ✏')
 							])),
 						A2(
 						$elm$html$Html$input,
@@ -9240,9 +9381,9 @@ var $author$project$View$Home$detailHeader = function (event) {
 								$elm$html$Html$Attributes$class('inline-edit-number'),
 								$elm$html$Html$Attributes$type_('number'),
 								$elm$html$Html$Attributes$value(
-								$elm$core$String$fromInt(event.aY)),
+								$elm$core$String$fromInt(event.aX)),
 								$elm$html$Html$Events$onInput(
-								$author$project$Types$SetEventGuestCount(event.a_))
+								$author$project$Types$SetEventGuestCount(event.aZ))
 							]),
 						_List_Nil)
 					]))
@@ -9291,7 +9432,7 @@ var $author$project$View$Home$eventDetailView = function (model) {
 			A2(
 				$elm$core$List$filter,
 				function (e) {
-					return _Utils_eq(e.a_, eventId);
+					return _Utils_eq(e.aZ, eventId);
 				},
 				model.ai));
 		if (_v1.$ === 1) {
@@ -9347,11 +9488,11 @@ var $author$project$View$Home$eventCard = F2(
 	function (activeId, event) {
 		var isActive = _Utils_eq(
 			activeId,
-			$elm$core$Maybe$Just(event.a_));
+			$elm$core$Maybe$Just(event.aZ));
 		var guestLabel = _Utils_ap(
-			$elm$core$String$fromInt(event.aY),
-			(event.aY === 1) ? ' Gast' : ' G\u00E4ste');
-		var cocktailCount = $elm$core$List$length(event.aU);
+			$elm$core$String$fromInt(event.aX),
+			(event.aX === 1) ? ' Gast' : ' Gäste');
+		var cocktailCount = $elm$core$List$length(event.aT);
 		var countLabel = _Utils_ap(
 			$elm$core$String$fromInt(cocktailCount),
 			(cocktailCount === 1) ? ' Cocktail' : ' Cocktails');
@@ -9371,7 +9512,7 @@ var $author$project$View$Home$eventCard = F2(
 							$elm$html$Html$Attributes$class('card-content'),
 							A2($elm$html$Html$Attributes$style, 'cursor', 'pointer'),
 							$elm$html$Html$Events$onClick(
-							$author$project$Types$OpenEventDetail(event.a_))
+							$author$project$Types$OpenEventDetail(event.aZ))
 						]),
 					_List_fromArray(
 						[
@@ -9392,7 +9533,7 @@ var $author$project$View$Home$eventCard = F2(
 										]),
 									_List_fromArray(
 										[
-											$elm$html$Html$text(event.a5)
+											$elm$html$Html$text(event.a4)
 										])),
 									isActive ? A2(
 									$elm$html$Html$span,
@@ -9432,7 +9573,7 @@ var $author$project$View$Home$eventCard = F2(
 								[
 									$elm$html$Html$Attributes$class('card-footer-item card-footer-btn'),
 									$elm$html$Html$Events$onClick(
-									$author$project$Types$DuplicateEvent(event.a_))
+									$author$project$Types$DuplicateEvent(event.aZ))
 								]),
 							_List_fromArray(
 								[
@@ -9444,7 +9585,7 @@ var $author$project$View$Home$eventCard = F2(
 								[
 									$elm$html$Html$Attributes$class('card-footer-item card-footer-btn'),
 									$elm$html$Html$Events$onClick(
-									$author$project$Types$OpenShoppingForEvent(event.a_))
+									$author$project$Types$OpenShoppingForEvent(event.aZ))
 								]),
 							_List_fromArray(
 								[
@@ -9456,11 +9597,11 @@ var $author$project$View$Home$eventCard = F2(
 								[
 									$elm$html$Html$Attributes$class('card-footer-item card-footer-btn has-text-danger'),
 									$elm$html$Html$Events$onClick(
-									$author$project$Types$DeleteEvent(event.a_))
+									$author$project$Types$DeleteEvent(event.aZ))
 								]),
 							_List_fromArray(
 								[
-									$elm$html$Html$text('L\u00F6schen')
+									$elm$html$Html$text('Löschen')
 								]))
 						]))
 				]));
@@ -9508,7 +9649,7 @@ var $author$project$Types$EventFormNameChanged = function (a) {
 var $author$project$Types$SaveEvent = {$: 15};
 var $elm$html$Html$label = _VirtualDom_node('label');
 var $author$project$View$Home$eventModal = function (model) {
-	var isActive = model.m === 3;
+	var isActive = model.n === 3;
 	var modalClass = isActive ? 'modal is-active' : 'modal';
 	return A2(
 		$elm$html$Html$div,
@@ -9603,7 +9744,7 @@ var $author$project$View$Home$eventModal = function (model) {
 														(!_Utils_eq(model.E, $elm$core$Maybe$Nothing)) ? 'input is-danger' : 'input'),
 														$elm$html$Html$Attributes$type_('text'),
 														$elm$html$Html$Attributes$placeholder('z. B. Sommerfest'),
-														$elm$html$Html$Attributes$value(model.Q),
+														$elm$html$Html$Attributes$value(model.R),
 														$elm$html$Html$Events$onInput($author$project$Types$EventFormNameChanged)
 													]),
 												_List_Nil)
@@ -9643,7 +9784,7 @@ var $author$project$View$Home$eventModal = function (model) {
 											]),
 										_List_fromArray(
 											[
-												$elm$html$Html$text('Anzahl G\u00E4ste')
+												$elm$html$Html$text('Anzahl Gäste')
 											])),
 										A2(
 										$elm$html$Html$div,
@@ -9659,7 +9800,7 @@ var $author$project$View$Home$eventModal = function (model) {
 													[
 														$elm$html$Html$Attributes$class('input'),
 														$elm$html$Html$Attributes$type_('number'),
-														$elm$html$Html$Attributes$value(model.P),
+														$elm$html$Html$Attributes$value(model.Q),
 														$elm$html$Html$Events$onInput($author$project$Types$EventFormGuestCountChanged)
 													]),
 												_List_Nil)
@@ -9831,7 +9972,7 @@ var $author$project$View$Shopping$addAmounts = F2(
 	});
 var $author$project$View$Shopping$compareIngredients = F2(
 	function (a, b) {
-		var _v0 = _Utils_Tuple2(a.aP, b.aP);
+		var _v0 = _Utils_Tuple2(a.aO, b.aO);
 		_v0$1:
 		while (true) {
 			_v0$2:
@@ -9840,7 +9981,7 @@ var $author$project$View$Shopping$compareIngredients = F2(
 					case 0:
 						switch (_v0.b.$) {
 							case 0:
-								return A2($elm$core$Basics$compare, a.a5, b.a5);
+								return A2($elm$core$Basics$compare, a.a4, b.a4);
 							case 1:
 								break _v0$1;
 							default:
@@ -9851,7 +9992,7 @@ var $author$project$View$Shopping$compareIngredients = F2(
 							case 0:
 								break _v0$2;
 							case 1:
-								return A2($elm$core$Basics$compare, a.a5, b.a5);
+								return A2($elm$core$Basics$compare, a.a4, b.a4);
 							default:
 								return 0;
 						}
@@ -9862,7 +10003,7 @@ var $author$project$View$Shopping$compareIngredients = F2(
 							case 1:
 								return 2;
 							default:
-								return A2($elm$core$Basics$compare, a.a5, b.a5);
+								return A2($elm$core$Basics$compare, a.a4, b.a4);
 						}
 				}
 			}
@@ -9890,7 +10031,7 @@ var $author$project$View$Shopping$computeTotals = F2(
 		var allPairs = A2(
 			$elm$core$List$concatMap,
 			function (ec) {
-				var _v3 = A2($elm$core$Dict$get, ec.aT, cache);
+				var _v3 = A2($elm$core$Dict$get, ec.aS, cache);
 				if (_v3.$ === 1) {
 					return _List_Nil;
 				} else {
@@ -9899,13 +10040,13 @@ var $author$project$View$Shopping$computeTotals = F2(
 						$elm$core$List$map,
 						function (ing) {
 							return _Utils_Tuple2(
-								ing.a5,
-								A2($author$project$View$Shopping$scaleAmount, ec.a9 * event.aY, ing.aP));
+								ing.a4,
+								A2($author$project$View$Shopping$scaleAmount, ec.a9 * event.aX, ing.aO));
 						},
-						cocktail.a0);
+						cocktail.a$);
 				}
 			},
-			event.aU);
+			event.aT);
 		var grouped = A3(
 			$elm$core$List$foldl,
 			F2(
@@ -9934,7 +10075,7 @@ var $author$project$View$Shopping$computeTotals = F2(
 				function (_v0) {
 					var name = _v0.a;
 					var amount = _v0.b;
-					return {aP: amount, a5: name};
+					return {aO: amount, a4: name};
 				},
 				$elm$core$Dict$toList(grouped)));
 	});
@@ -10069,7 +10210,7 @@ var $author$project$View$Shopping$viewRow = F2(
 					_List_Nil,
 					_List_fromArray(
 						[
-							$elm$html$Html$text(agg.a5)
+							$elm$html$Html$text(agg.a4)
 						])),
 					A2(
 					$elm$html$Html$td,
@@ -10077,14 +10218,14 @@ var $author$project$View$Shopping$viewRow = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							$author$project$View$Shopping$formatGesamt(agg.aP))
+							$author$project$View$Shopping$formatGesamt(agg.aO))
 						])),
 					A2(
 					$elm$html$Html$td,
 					_List_Nil,
 					_List_fromArray(
 						[
-							A3($author$project$View$Shopping$viewPackageSizeCell, agg.a5, agg.aP, packageSizes)
+							A3($author$project$View$Shopping$viewPackageSizeCell, agg.a4, agg.aO, packageSizes)
 						])),
 					A2(
 					$elm$html$Html$td,
@@ -10092,14 +10233,14 @@ var $author$project$View$Shopping$viewRow = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							A3($author$project$View$Shopping$formatKaufen, agg.a5, agg.aP, packageSizes))
+							A3($author$project$View$Shopping$formatKaufen, agg.a4, agg.aO, packageSizes))
 						]))
 				]));
 	});
 var $author$project$View$Shopping$viewEvent = F2(
 	function (model, event) {
-		var aggregated = A2($author$project$View$Shopping$computeTotals, event, model.r);
-		return $elm$core$List$isEmpty(event.aU) ? A2(
+		var aggregated = A2($author$project$View$Shopping$computeTotals, event, model.j);
+		return $elm$core$List$isEmpty(event.aT) ? A2(
 			$elm$html$Html$div,
 			_List_fromArray(
 				[
@@ -10107,7 +10248,7 @@ var $author$project$View$Shopping$viewEvent = F2(
 				]),
 			_List_fromArray(
 				[
-					$elm$html$Html$text('Event \"' + (event.a5 + '\" hat noch keine Cocktails.'))
+					$elm$html$Html$text('Event \"' + (event.a4 + '\" hat noch keine Cocktails.'))
 				])) : ($elm$core$List$isEmpty(aggregated) ? A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -10131,7 +10272,7 @@ var $author$project$View$Shopping$viewEvent = F2(
 					_List_fromArray(
 						[
 							$elm$html$Html$text(
-							event.a5 + (' · ' + ($elm$core$String$fromInt(event.aY) + ' Gäste')))
+							event.a4 + (' · ' + ($elm$core$String$fromInt(event.aX) + ' Gäste')))
 						])),
 					A2(
 					$elm$html$Html$table,
@@ -10238,7 +10379,7 @@ var $author$project$View$Shopping$viewBody = function (model) {
 			A2(
 				$elm$core$List$filter,
 				function (e) {
-					return _Utils_eq(e.a_, eventId);
+					return _Utils_eq(e.aZ, eventId);
 				},
 				model.ai));
 		if (_v1.$ === 1) {
@@ -10358,7 +10499,7 @@ var $author$project$Codec$encodeEventCocktail = function (ec) {
 			[
 				_Utils_Tuple2(
 				'cocktailId',
-				$elm$json$Json$Encode$string(ec.aT)),
+				$elm$json$Json$Encode$string(ec.aS)),
 				_Utils_Tuple2(
 				'portions',
 				$elm$json$Json$Encode$int(ec.a9))
@@ -10370,16 +10511,16 @@ var $author$project$Codec$encodeEvent = function (event) {
 			[
 				_Utils_Tuple2(
 				'id',
-				$elm$json$Json$Encode$string(event.a_)),
+				$elm$json$Json$Encode$string(event.aZ)),
 				_Utils_Tuple2(
 				'name',
-				$elm$json$Json$Encode$string(event.a5)),
+				$elm$json$Json$Encode$string(event.a4)),
 				_Utils_Tuple2(
 				'guestCount',
-				$elm$json$Json$Encode$int(event.aY)),
+				$elm$json$Json$Encode$int(event.aX)),
 				_Utils_Tuple2(
 				'cocktails',
-				A2($elm$json$Json$Encode$list, $author$project$Codec$encodeEventCocktail, event.aU))
+				A2($elm$json$Json$Encode$list, $author$project$Codec$encodeEventCocktail, event.aT))
 			]));
 };
 var $author$project$Codec$encodeState = function (model) {
@@ -10405,7 +10546,7 @@ var $author$project$Codec$encodeToString = function (model) {
 };
 var $elm$html$Html$Attributes$readonly = $elm$html$Html$Attributes$boolProperty('readOnly');
 var $author$project$Main$saveDialog = function (model) {
-	return (model.m === 1) ? A2(
+	return (model.n === 1) ? A2(
 		$elm$html$Html$div,
 		_List_fromArray(
 			[
@@ -10623,7 +10764,7 @@ var $author$project$View$Topbar$view = function (model) {
 								_List_fromArray(
 									[
 										_Utils_Tuple2('navbar-burger', true),
-										_Utils_Tuple2('is-active', model.O)
+										_Utils_Tuple2('is-active', model.P)
 									])),
 								$elm$html$Html$Events$onClick($author$project$Types$ToggleBurger)
 							]),
@@ -10642,7 +10783,7 @@ var $author$project$View$Topbar$view = function (model) {
 						_List_fromArray(
 							[
 								_Utils_Tuple2('navbar-menu', true),
-								_Utils_Tuple2('is-active', model.O)
+								_Utils_Tuple2('is-active', model.P)
 							]))
 					]),
 				_List_fromArray(
@@ -10699,7 +10840,7 @@ var $author$project$View$Topbar$view = function (model) {
 };
 var $author$project$Main$view = function (model) {
 	return {
-		aR: _List_fromArray(
+		aQ: _List_fromArray(
 			[
 				$author$project$View$Topbar$view(model),
 				$author$project$Main$routeView(model),
@@ -10710,6 +10851,6 @@ var $author$project$Main$view = function (model) {
 	};
 };
 var $author$project$Main$main = $elm$browser$Browser$application(
-	{a1: $author$project$Main$init, a6: $author$project$Types$UrlChanged, a7: $author$project$Types$LinkClicked, bf: $author$project$Main$subscriptions, bi: $author$project$Main$update, bj: $author$project$Main$view});
+	{a0: $author$project$Main$init, a5: $author$project$Types$UrlChanged, a6: $author$project$Types$LinkClicked, bf: $author$project$Main$subscriptions, bi: $author$project$Main$update, bj: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));

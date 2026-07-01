@@ -13,6 +13,7 @@ import Html exposing (Html, button, div, text)
 import Html.Attributes exposing (class, classList, placeholder, readonly, rows, value)
 import Html.Events exposing (onClick, onInput)
 import Route
+import Set
 import Types exposing (..)
 import Url exposing (Url)
 import View.Glossar
@@ -39,10 +40,10 @@ main =
 
 
 -- INIT
-
-
 -- Sets up the initial model when the app first loads.
 -- The starting route is parsed from the URL the browser is already at.
+
+
 init : () -> Url -> Nav.Key -> ( Model, Cmd Msg )
 init _ url key =
     let
@@ -74,16 +75,22 @@ init _ url key =
             , loadError = Nothing
             }
     in
-    -- Fire a category fetch immediately if the app starts on the Glossar route.
-    ( initialModel, fetchCategoriesIfNeeded startRoute initialModel )
+    -- Fire a category fetch if the app starts on the Glossar route, and correct the
+    -- address bar to "#/" if the app was opened at a bogus URL (e.g. an old "#/foobar").
+    ( initialModel
+    , Cmd.batch
+        [ fetchCategoriesIfNeeded startRoute initialModel
+        , redirectUnknownToHome key url
+        ]
+    )
 
 
 
 -- UPDATE
-
-
 -- Central dispatcher: every Msg variant is handled here.
 -- As features grow, helper functions will be extracted below the case expression.
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -96,7 +103,10 @@ update msg model =
                     Route.fromUrl url
             in
             ( { model | route = newRoute, burgerOpen = False }
-            , fetchCategoriesIfNeeded newRoute model
+            , Cmd.batch
+                [ fetchCategoriesIfNeeded newRoute model
+                , redirectUnknownToHome model.key url
+                ]
             )
 
         LinkClicked request ->
@@ -141,6 +151,9 @@ update msg model =
             -- Only events, nextEventId, and packageSizes are restored; UI state resets.
             case Codec.parseState model.importText of
                 Ok saved ->
+                    -- A loaded project only stores cocktail IDs, not full recipes, so the
+                    -- cache is empty. Fetch every referenced recipe now so names, ratio
+                    -- glasses, and the shopping list all have their ingredient data.
                     ( { model
                         | events = saved.events
                         , nextEventId = saved.nextEventId
@@ -150,7 +163,8 @@ update msg model =
                         , loadError = Nothing
                         , activeEventId = Nothing
                       }
-                    , Cmd.none
+                    , fetchMissingRecipes model.cocktailCache
+                        (List.concatMap (.cocktails >> List.map .cocktailId) saved.events)
                     )
 
                 Err errMsg ->
@@ -226,7 +240,6 @@ update msg model =
             ( { model | selectedCocktailId = Nothing }, Cmd.none )
 
         -- EVENT MANAGEMENT
-
         OpenCreateEvent ->
             -- Open the create dialog with a blank form and no previous error.
             ( { model | activeDialog = CreateEventDialog, eventFormName = "", eventFormGuestCount = "10", eventFormError = Nothing }
@@ -346,12 +359,18 @@ update msg model =
 
         OpenEventDetail eventId ->
             -- Open an event in the right panel and reset the search state.
+            -- Fetch any recipes still missing from the cache so the row glasses render.
+            let
+                cocktailIds =
+                    List.filter (\e -> e.id == eventId) model.events
+                        |> List.concatMap (.cocktails >> List.map .cocktailId)
+            in
             ( { model
                 | activeEventId = Just eventId
                 , eventSearchQuery = ""
                 , eventSearchResults = []
               }
-            , Cmd.none
+            , fetchMissingRecipes model.cocktailCache cocktailIds
             )
 
         CloseEventDetail ->
@@ -395,7 +414,6 @@ update msg model =
             ( { model | events = updatedEvents }, Cmd.none )
 
         -- EVENT COCKTAIL MANAGEMENT
-
         EventSearchChanged query ->
             ( { model | eventSearchQuery = query }, Cmd.none )
 
@@ -523,8 +541,17 @@ update msg model =
             -- Activate a specific event and navigate to the shopping list page.
             -- This fixes the bug where the Einkaufsliste button always showed the active
             -- event instead of the event whose button was clicked.
+            -- Also fetch any missing recipes so the shopping list can compute right away.
+            let
+                cocktailIds =
+                    List.filter (\e -> e.id == eventId) model.events
+                        |> List.concatMap (.cocktails >> List.map .cocktailId)
+            in
             ( { model | activeEventId = Just eventId }
-            , Nav.pushUrl model.key (Route.toPath ShoppingRoute)
+            , Cmd.batch
+                [ Nav.pushUrl model.key (Route.toPath ShoppingRoute)
+                , fetchMissingRecipes model.cocktailCache cocktailIds
+                ]
             )
 
         SetPortions cocktailId newPortions ->
@@ -566,16 +593,51 @@ update msg model =
 
 
 -- SUBSCRIPTIONS
-
-
 -- No subscriptions needed yet.
+
+
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.none
 
 
+
+-- Rewrites the address bar to the Events home page ("#/") when the URL carries no known
+-- route. fromUrl already renders Events in that case; this just cleans up the visible URL.
+-- Uses replaceUrl (not pushUrl) so the bogus URL leaves no back-button entry.
+
+
+redirectUnknownToHome : Nav.Key -> Url -> Cmd Msg
+redirectUnknownToHome key url =
+    case Route.parse url of
+        Just _ ->
+            Cmd.none
+
+        Nothing ->
+            Nav.replaceUrl key (Route.toPath HomeRoute)
+
+
+
+-- Fetches full recipes for every cocktail ID not yet in the cache (e.g. right after a
+-- project is loaded), so names, ratio glasses, and the shopping list have their data.
+-- Duplicate IDs are collapsed via Set so each recipe is requested at most once.
+
+
+fetchMissingRecipes : Dict.Dict String FullCocktail -> List String -> Cmd Msg
+fetchMissingRecipes cache ids =
+    ids
+        |> List.filter (\id -> not (Dict.member id cache))
+        |> Set.fromList
+        |> Set.toList
+        |> List.map Api.fetchCocktailById
+        |> Cmd.batch
+
+
+
 -- Returns Api.fetchCategories only when navigating to GlossarRoute and not yet loaded.
 -- Cmd.none in all other cases so nothing fires unnecessarily.
+
+
 fetchCategoriesIfNeeded : Route -> Model -> Cmd Msg
 fetchCategoriesIfNeeded route model =
     case ( route, model.categoriesState ) of
@@ -591,9 +653,9 @@ fetchCategoriesIfNeeded route model =
 
 
 -- VIEW
-
-
 -- Renders the full page: topbar + the active route's content area + app-level dialogs.
+
+
 view : Model -> Browser.Document Msg
 view model =
     { title = "CocktailPlaner"
@@ -606,8 +668,11 @@ view model =
     }
 
 
+
 -- Save dialog: shows the serialised JSON so the user can copy it.
 -- The textarea is read-only; the user selects all and copies to the clipboard.
+
+
 saveDialog : Model -> Html Msg
 saveDialog model =
     if model.activeDialog == SaveDialog then
@@ -639,8 +704,11 @@ saveDialog model =
         text ""
 
 
+
 -- Load dialog: the user pastes saved JSON, then clicks "Laden".
 -- Shows an error message if the JSON cannot be parsed.
+
+
 loadDialog : Model -> Html Msg
 loadDialog model =
     if model.activeDialog == LoadDialog then
@@ -692,8 +760,11 @@ loadDialog model =
         text ""
 
 
+
 -- Picks the correct page view based on the active route.
 -- GlossarRoute renders Home in the background with the Glossar modal on top.
+
+
 routeView : Model -> Html Msg
 routeView model =
     case model.route of

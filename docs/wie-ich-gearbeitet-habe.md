@@ -103,6 +103,40 @@ Sie werden bei jedem Deploy als PNG gerendert.
 
 ---
 
+## Phase 6 — Prüfer-Feedback umgesetzt (1. Juli)
+
+Das Feedback nannte zwei Pflicht-Aspekte, die noch nicht sauber erfüllt waren.
+
+**URL-Navigation, die das Teilen übersteht.** Das Routing war pfad-basiert
+(`/shopping`, `/glossar`). `Browser.application` fängt aber nur Klicks *innerhalb* der
+laufenden App ab — eine frisch eingefügte URL fragt GitHub Pages nach dem Pfad, und der
+antwortet mangels SPA-Fallback mit 404. Ich habe deshalb auf **Fragment-/Hash-Routing**
+umgestellt (`#/`, `#/shopping`, `#/glossar`): das Fragment sendet der Browser nie an den
+Server, jede geteilte oder neu geladene URL lädt immer `index.html`, und Elm löst die Route
+clientseitig auf. Unbekannte URLs (`#/foobar`) fallen auf die Events-Startseite zurück und
+die Adresszeile wird per `Nav.replaceUrl` korrigiert. Das ist in ADR-0007 als Statuswechsel
+von Pfad auf Fragment dokumentiert.
+
+**Das dynamische SVG sichtbar machen.** Das datengetriebene Verhältnis-Glas existierte,
+war aber nur im Glossar-Modal zu sehen. Ich habe das vorhandene `CocktailSvg.view`
+wiederverwendet und pro Cocktail-Zeile im Planer ein **Mini-Glas** ergänzt (`.row-glass`),
+sodass mehrere unterschiedliche Gläser sofort nebeneinander sichtbar sind — ohne neuen
+SVG-Code.
+
+**Fehlende Rezepte nachladen.** Beide Änderungen legten eine Lücke offen: Ein gespeichertes
+Projekt hält pro Cocktail nur die `cocktailId`, keine Zutaten. Nach „Projekt laden" war der
+Cache leer — Namen, Mini-Gläser und Einkaufsliste blieben leer. `fetchMissingRecipes` zieht
+die fehlenden Volldaten nach dem Laden über die bestehende `Api.fetchCocktailById` nach; die
+Antworten landen über den vorhandenen `GotFullCocktail`-Pfad im Cache. Kein neuer Msg, kein
+neuer Decoder.
+
+Abschließend habe ich Save/Load in acht Playwright-Szenarien geprüft — Serialisierung,
+Round-Trip nach Reload inklusive Nachladen, ungültiges JSON, Überschreib-Warnung,
+Multi-Event, Portionen- und Namenstreue, `nextEventId`-Kollision und die Einkaufsliste eines
+geladenen Events. Alle bestanden.
+
+---
+
 ## Zeitraum
 
 | Datum | Schwerpunkt |
@@ -110,5 +144,6 @@ Sie werden bei jedem Deploy als PNG gerendert.
 | 26. Juni | ADRs, Toolchain, Prototyp, Agent-Harness-Grundlage |
 | 29. Juni | Alle Kernfeatures, UI-Iterationen, Modul-Struktur |
 | 30. Juni | QA, Bugfixing, Save/Load, Deployment, Dokumentation, Diagramme |
+| 1. Juli | Prüfer-Feedback: Hash-Routing, Mini-Glas im Planer, Rezept-Nachladen, Save/Load-Tests |
 
-Drei aktive Arbeitstage — von der leeren Datei bis zur öffentlichen Live-Demo.
+Vier aktive Arbeitstage — von der leeren Datei bis zur öffentlichen Live-Demo.

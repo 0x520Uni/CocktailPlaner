@@ -14,13 +14,14 @@ import Html.Events exposing (on, onClick, onInput)
 import Html.Keyed as Keyed
 import Json.Decode as Decode
 import Types exposing (Dialog(..), Event, EventCocktail, FullCocktail, Model, Msg(..), Route(..))
+import View.CocktailSvg
 
 
 
 -- TOP-LEVEL VIEW
-
-
 -- Renders the whole home page: modal (if open) + header bar + two-column layout.
+
+
 view : Model -> Html Msg
 view model =
     div [ class "section" ]
@@ -37,7 +38,10 @@ view model =
         ]
 
 
+
 -- Top bar: page title on the left, "New Event" button on the right.
+
+
 pageHeader : Html Msg
 pageHeader =
     div [ class "level" ]
@@ -52,9 +56,9 @@ pageHeader =
 
 
 -- EVENT LIST (left column)
-
-
 -- Shows all events as cards, or an onboarding prompt when there are none yet.
+
+
 eventListView : Model -> Html Msg
 eventListView model =
     if List.isEmpty model.events then
@@ -67,9 +71,12 @@ eventListView model =
         div [] (List.map (eventCard model.activeEventId) model.events)
 
 
+
 -- One event as a Bulma card.
 -- The card-content area is clickable and opens the event in the right panel.
 -- The card-footer holds secondary actions that do NOT open the event.
+
+
 eventCard : Maybe String -> Event -> Html Msg
 eventCard activeId event =
     let
@@ -101,7 +108,7 @@ eventCard activeId event =
                         " Gast"
 
                     else
-                        " G\u{00E4}ste"
+                        " Gäste"
                    )
     in
     div [ class cardClass ]
@@ -131,16 +138,16 @@ eventCard activeId event =
             , button [ class "card-footer-item card-footer-btn", onClick (OpenShoppingForEvent event.id) ]
                 [ text "Einkaufsliste" ]
             , button [ class "card-footer-item card-footer-btn has-text-danger", onClick (DeleteEvent event.id) ]
-                [ text "L\u{00F6}schen" ]
+                [ text "Löschen" ]
             ]
         ]
 
 
 
 -- EVENT DETAIL (right column)
-
-
 -- Shows the detail panel for the active event, or a visual placeholder.
+
+
 eventDetailView : Model -> Html Msg
 eventDetailView model =
     case model.activeEventId of
@@ -171,16 +178,19 @@ eventDetailView model =
                         ]
 
 
+
 -- Inline-editable header for the active event.
 -- The inputs look like plain text; a bottom border appears on hover/focus (see style.css).
 -- Changes are saved immediately to the event list — no save button needed.
+
+
 detailHeader : Event -> Html Msg
 detailHeader event =
     div [ class "mb-4" ]
         [ div [ class "is-flex is-justify-content-space-between is-align-items-flex-start" ]
             [ -- min-width: 0 is needed on a flex child so the input can shrink below its natural width.
               div [ class "is-flex-grow-1 mr-4", style "min-width" "0" ]
-                [ p [ class "is-size-7 has-text-grey mb-1" ] [ text "Eventname \u{270F}" ]
+                [ p [ class "is-size-7 has-text-grey mb-1" ] [ text "Eventname ✏" ]
                 , input
                     [ class "inline-edit-name"
                     , type_ "text"
@@ -190,10 +200,10 @@ detailHeader event =
                     []
                 ]
             , button [ class "button is-small is-light", style "flex-shrink" "0", onClick CloseEventDetail ]
-                [ text "\u{00D7}" ]
+                [ text "×" ]
             ]
         , div [ class "is-flex is-align-items-center mt-3" ]
-            [ p [ class "is-size-7 has-text-grey mr-2" ] [ text "G\u{00E4}ste \u{270F}" ]
+            [ p [ class "is-size-7 has-text-grey mr-2" ] [ text "Gäste ✏" ]
             , input
                 [ class "inline-edit-number"
                 , type_ "number"
@@ -207,20 +217,21 @@ detailHeader event =
 
 
 -- COCKTAIL LIST
-
-
 -- The table of cocktails added to the event, or a placeholder when empty.
+
+
 cocktailListView : Model -> Event -> Html Msg
 cocktailListView model event =
     if List.isEmpty event.cocktails then
         p [ class "has-text-grey-light mt-3" ]
-            [ text "Noch keine Cocktails \u{2014} suche unten, um welche hinzuzuf\u{00FC}gen." ]
+            [ text "Noch keine Cocktails — suche unten, um welche hinzuzufügen." ]
 
     else
         table [ class "table is-fullwidth is-striped is-narrow mt-3" ]
             [ thead []
                 [ tr []
-                    [ th [] [ text "Cocktail" ]
+                    [ th [] []
+                    , th [] [ text "Cocktail" ]
                     , th [] [ text "Portionen" ]
                     , th [] []
                     ]
@@ -229,21 +240,39 @@ cocktailListView model event =
             ]
 
 
+
 -- One row: cocktail name, portion counter (−/number/+), remove button.
+
+
 cocktailRow : Model -> EventCocktail -> Html Msg
 cocktailRow model ec =
     let
-        -- Look up the cocktail name from the cache; fall back to the raw ID if not cached.
+        -- Look up the full recipe once; used for both the name and the ratio glass.
+        cached =
+            Dict.get ec.cocktailId model.cocktailCache
+
+        -- Fall back to the raw ID if the recipe is not cached yet.
         cocktailName =
-            case Dict.get ec.cocktailId model.cocktailCache of
+            case cached of
                 Just c ->
                     c.name
 
                 Nothing ->
                     ec.cocktailId
+
+        -- Small ratio glass per row so the dynamic SVG is visible right on the planner.
+        -- While the recipe is still loading, show an empty glass frame as a placeholder.
+        glassCell =
+            case cached of
+                Just c ->
+                    div [ class "row-glass" ] [ View.CocktailSvg.view c.ingredients ]
+
+                Nothing ->
+                    div [ class "row-glass row-glass-empty" ] []
     in
     tr []
-        [ td [] [ text cocktailName ]
+        [ td [] [ glassCell ]
+        , td [] [ text cocktailName ]
         , td []
             [ div [ class "field has-addons" ]
                 [ div [ class "control" ]
@@ -251,7 +280,7 @@ cocktailRow model ec =
                         [ class "button is-small"
                         , onClick (SetPortions ec.cocktailId (ec.portions - 1))
                         ]
-                        [ text "\u{2212}" ]
+                        [ text "−" ]
                     ]
                 , div [ class "control" ]
                     [ input
@@ -281,27 +310,27 @@ cocktailRow model ec =
                 [ class "button is-small is-danger is-light"
                 , onClick (RemoveCocktailFromEvent ec.cocktailId)
                 ]
-                [ text "\u{00D7}" ]
+                [ text "×" ]
             ]
         ]
 
 
 
 -- COCKTAIL SEARCH (inside the detail panel)
-
-
 -- Search input + button + results list.
 -- Search fires on Enter key press OR on clicking the "Suchen" button (no debounce).
+
+
 cocktailSearchView : Model -> Html Msg
 cocktailSearchView model =
     div []
-        [ p [ class "label" ] [ text "Cocktail hinzuf\u{00FC}gen" ]
+        [ p [ class "label" ] [ text "Cocktail hinzufügen" ]
         , div [ class "field has-addons mb-3" ]
             [ div [ class "control is-expanded" ]
                 [ input
                     [ class "input"
                     , type_ "text"
-                    , placeholder "Cocktailname, z. B. Mojito \u{2026}"
+                    , placeholder "Cocktailname, z. B. Mojito …"
                     , value model.eventSearchQuery
                     , onInput EventSearchChanged
                     , on "keydown" (enterDecoder SearchCocktailsForEvent)
@@ -320,7 +349,10 @@ cocktailSearchView model =
         ]
 
 
+
 -- Succeeds only when the pressed key is Enter; used to submit the search without a button click.
+
+
 enterDecoder : Msg -> Decode.Decoder Msg
 enterDecoder msg =
     Decode.field "key" Decode.string
@@ -334,7 +366,10 @@ enterDecoder msg =
             )
 
 
+
 -- Shows the search result list, or nothing when there are no results yet.
+
+
 searchResultsView : List FullCocktail -> Html Msg
 searchResultsView results =
     if List.isEmpty results then
@@ -347,7 +382,10 @@ searchResultsView results =
             )
 
 
+
 -- One result row: cocktail name on the left, "+ Hinzufügen" button on the right.
+
+
 searchResultItem : FullCocktail -> Html Msg
 searchResultItem cocktail =
     div [ class "panel-block" ]
@@ -356,17 +394,17 @@ searchResultItem cocktail =
             [ class "button is-small is-success is-light"
             , onClick (AddCocktailToEvent cocktail.id)
             ]
-            [ text "+ Hinzuf\u{00FC}gen" ]
+            [ text "+ Hinzufügen" ]
         ]
 
 
 
 -- CREATE MODAL
-
-
 -- Renders the Bulma modal for creating a new event.
 -- Only visible when activeDialog == CreateEventDialog.
 -- Editing an existing event is done inline in the detail panel, not via this modal.
+
+
 eventModal : Model -> Html Msg
 eventModal model =
     let
@@ -414,7 +452,7 @@ eventModal model =
                             text ""
                     ]
                 , div [ class "field" ]
-                    [ label [ class "label" ] [ text "Anzahl G\u{00E4}ste" ]
+                    [ label [ class "label" ] [ text "Anzahl Gäste" ]
                     , div [ class "control" ]
                         [ input
                             [ class "input"

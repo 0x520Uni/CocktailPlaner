@@ -76,3 +76,8 @@ Skip: single-line edits, typo fixes, reformatting.
 | 2026-06-30 | IMPL | MEDIUM | Playful CSS-only motion layer in style.css (card lift, modal bounce+blur, SVG pour, navbar wiggle, floating empty-state); no Elm changes, prefers-reduced-motion respected |
 | 2026-06-30 | IMPL | HIGH | Deploy: Mermaid PNGs + PDF exports + how-we-worked regen |
 | 2026-06-30 | DOCS | LOW | Rename how-we-worked → wie-ich-gearbeitet-habe, rewrite to first person |
+| 2026-07-01 | FIX | HIGH | Routing von Pfad auf Hash/Fragment (#/shopping) umgestellt — teilbare URLs, kein 404 mehr bei Direktaufruf; Fallback-Redirect unbekannter URLs auf Events (Route.parse + Nav.replaceUrl) |
+| 2026-07-01 | FEATURE | HIGH | Dynamisches Verhaeltnis-Glas (CocktailSvg) pro Cocktail-Zeile im Planer sichtbar gemacht (.row-glass) |
+| 2026-07-01 | FIX | MEDIUM | fetchMissingRecipes: fehlende Rezepte nach 'Projekt laden' nachladen, damit Namen, Glaeser und Einkaufsliste befuellt werden |
+| 2026-07-01 | DOCS | MEDIUM | KB-Sync: ADR-0007 (CP-A-15) + ADR-Zusammenfassung (CP-A-13) auf Hash/Fragment-Routing aktualisiert; Notiz zu fetchMissingRecipes bei ADR-0008 |
+| 2026-07-01 | DOCS | LOW | Save/Load per Playwright getestet (8 Szenarien: Serialisierung, Round-Trip nach Reload inkl. fetchMissingRecipes, ungültiges JSON, Überschreib-Warnung, Multi-Event, Portionen-/Namenstreue, nextEventId-Kollision, Einkaufsliste aus geladenem Event) — alle bestanden |

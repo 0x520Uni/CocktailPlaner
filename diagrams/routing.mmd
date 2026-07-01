@@ -9,9 +9,11 @@ flowchart LR
     URL --> fromUrl
     NR -->|"Nav.pushUrl"| URL
 
-    fromUrl --> HR["HomeRoute<br/><code>/</code>"]
-    fromUrl --> SR["ShoppingRoute<br/><code>/shopping</code>"]
-    fromUrl --> GR["GlossarRoute<br/><code>/glossar</code>"]
+    fromUrl --> HR["HomeRoute<br/><code>#/</code>"]
+    fromUrl --> SR["ShoppingRoute<br/><code>#/shopping</code>"]
+    fromUrl --> GR["GlossarRoute<br/><code>#/glossar</code>"]
+    fromUrl -.->|"unbekannte URL"| RD["redirectUnknownToHome<br/>Nav.replaceUrl #/"]
+    RD -.-> HR
 
     HR --> VH["View.Home<br/>Event-Verwaltung"]
     SR --> VS["View.Shopping<br/>Einkaufsliste"]
