@@ -6160,7 +6160,7 @@ var $author$project$Api$fetchCategories = $elm$http$Http$get(
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$fetchCategoriesIfNeeded = F2(
 	function (route, model) {
-		var _v0 = _Utils_Tuple2(route, model.D);
+		var _v0 = _Utils_Tuple2(route, model.v);
 		_v0$2:
 		while (true) {
 			if (_v0.a === 2) {
@@ -6185,7 +6185,7 @@ var $author$project$Main$fetchCategoriesIfNeeded = F2(
 var $author$project$Types$HomeRoute = 0;
 var $elm$url$Url$Parser$State = F5(
 	function (visited, unvisited, params, frag, value) {
-		return {v: frag, w: params, u: unvisited, q: value, y: visited};
+		return {w: frag, x: params, u: unvisited, q: value, z: visited};
 	});
 var $elm$url$Url$Parser$getFirstMatch = function (states) {
 	getFirstMatch:
@@ -6307,10 +6307,10 @@ var $author$project$Types$ShoppingRoute = 1;
 var $elm$url$Url$Parser$Parser = $elm$core$Basics$identity;
 var $elm$url$Url$Parser$mapState = F2(
 	function (func, _v0) {
-		var visited = _v0.y;
+		var visited = _v0.z;
 		var unvisited = _v0.u;
-		var params = _v0.w;
-		var frag = _v0.v;
+		var params = _v0.x;
+		var frag = _v0.w;
 		var value = _v0.q;
 		return A5(
 			$elm$url$Url$Parser$State,
@@ -6324,10 +6324,10 @@ var $elm$url$Url$Parser$map = F2(
 	function (subValue, _v0) {
 		var parseArg = _v0;
 		return function (_v1) {
-			var visited = _v1.y;
+			var visited = _v1.z;
 			var unvisited = _v1.u;
-			var params = _v1.w;
-			var frag = _v1.v;
+			var params = _v1.x;
+			var frag = _v1.w;
 			var value = _v1.q;
 			return A2(
 				$elm$core$List$map,
@@ -6365,10 +6365,10 @@ var $elm$url$Url$Parser$oneOf = function (parsers) {
 };
 var $elm$url$Url$Parser$s = function (str) {
 	return function (_v0) {
-		var visited = _v0.y;
+		var visited = _v0.z;
 		var unvisited = _v0.u;
-		var params = _v0.w;
-		var frag = _v0.v;
+		var params = _v0.x;
+		var frag = _v0.w;
 		var value = _v0.q;
 		if (!unvisited.b) {
 			return _List_Nil;
@@ -6457,7 +6457,7 @@ var $author$project$Main$redirectUnknownToHome = F2(
 var $author$project$Main$init = F3(
 	function (_v0, url, key) {
 		var startRoute = $author$project$Route$fromUrl(url);
-		var initialModel = {n: 0, g: $elm$core$Maybe$Nothing, P: false, o: $elm$core$Dict$empty, D: $author$project$Types$CategoriesNotLoaded, j: $elm$core$Dict$empty, E: $elm$core$Maybe$Nothing, Q: '10', R: '', F: '', G: _List_Nil, ai: _List_Nil, T: _List_Nil, H: '', I: key, K: $elm$core$Maybe$Nothing, ao: 1, aq: $elm$core$Dict$empty, Y: startRoute, Z: '', aC: $elm$core$Maybe$Nothing, _: $elm$core$Maybe$Nothing};
+		var initialModel = {n: 0, g: $elm$core$Maybe$Nothing, P: false, o: $elm$core$Dict$empty, v: $author$project$Types$CategoriesNotLoaded, j: $elm$core$Dict$empty, E: $elm$core$Maybe$Nothing, Q: '10', R: '', F: '', G: _List_Nil, ai: _List_Nil, T: _List_Nil, H: '', I: key, K: $elm$core$Maybe$Nothing, ao: 1, aq: $elm$core$Dict$empty, Y: startRoute, Z: '', aC: $elm$core$Maybe$Nothing, _: $elm$core$Maybe$Nothing};
 		return _Utils_Tuple2(
 			initialModel,
 			$elm$core$Platform$Cmd$batch(
@@ -7127,9 +7127,19 @@ var $author$project$Main$update = F2(
 				var route = msg.a;
 				var updatedModel = function () {
 					if (route === 2) {
-						return _Utils_update(
-							model,
-							{D: $author$project$Types$CategoriesLoading});
+						var _v3 = model.v;
+						switch (_v3.$) {
+							case 0:
+								return _Utils_update(
+									model,
+									{v: $author$project$Types$CategoriesLoading});
+							case 3:
+								return _Utils_update(
+									model,
+									{v: $author$project$Types$CategoriesLoading});
+							default:
+								return model;
+						}
 					} else {
 						return model;
 					}
@@ -7146,9 +7156,9 @@ var $author$project$Main$update = F2(
 								A2($author$project$Main$fetchCategoriesIfNeeded, route, model)
 							])));
 			case 6:
-				var _v3 = $author$project$Codec$parseState(model.H);
-				if (!_v3.$) {
-					var saved = _v3.a;
+				var _v4 = $author$project$Codec$parseState(model.H);
+				if (!_v4.$) {
+					var saved = _v4.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -7169,7 +7179,7 @@ var $author$project$Main$update = F2(
 										})),
 								saved.ai)));
 				} else {
-					var errMsg = _v3.a;
+					var errMsg = _v4.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -7185,14 +7195,14 @@ var $author$project$Main$update = F2(
 						_Utils_update(
 							model,
 							{
-								D: $author$project$Types$CategoriesLoaded(categoryNames)
+								v: $author$project$Types$CategoriesLoaded(categoryNames)
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{D: $author$project$Types$CategoriesFailed}),
+							{v: $author$project$Types$CategoriesFailed}),
 						$elm$core$Platform$Cmd$none);
 				}
 			case 8:
@@ -7282,8 +7292,8 @@ var $author$project$Main$update = F2(
 						{Q: count}),
 					$elm$core$Platform$Cmd$none);
 			case 15:
-				var _v4 = model.n;
-				if (_v4 === 3) {
+				var _v5 = model.n;
+				if (_v5 === 3) {
 					var trimmedName = $elm$core$String$trim(model.R);
 					var nameTaken = A2(
 						$elm$core$List$any,
@@ -7363,15 +7373,15 @@ var $author$project$Main$update = F2(
 					$elm$core$Platform$Cmd$none);
 			case 17:
 				var eventId = msg.a;
-				var _v5 = $elm$core$List$head(
+				var _v6 = $elm$core$List$head(
 					A2(
 						$elm$core$List$filter,
 						function (e) {
 							return _Utils_eq(e.aZ, eventId);
 						},
 						model.ai));
-				if (!_v5.$) {
-					var event = _v5.a;
+				if (!_v6.$) {
+					var event = _v6.a;
 					var baseName = event.a4 + ' (Kopie)';
 					var copyCount = $elm$core$List$length(
 						A2(
@@ -7458,9 +7468,9 @@ var $author$project$Main$update = F2(
 					$elm$core$List$map,
 					function (e) {
 						if (_Utils_eq(e.aZ, eventId)) {
-							var _v6 = $elm$core$String$toInt(countStr);
-							if (!_v6.$) {
-								var n = _v6.a;
+							var _v7 = $elm$core$String$toInt(countStr);
+							if (!_v7.$) {
+								var n = _v7.a;
 								return _Utils_update(
 									e,
 									{
@@ -7552,11 +7562,11 @@ var $author$project$Main$update = F2(
 				}
 			case 27:
 				var cocktailId = msg.a;
-				var _v7 = model.g;
-				if (_v7.$ === 1) {
+				var _v8 = model.g;
+				if (_v8.$ === 1) {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				} else {
-					var eventId = _v7.a;
+					var eventId = _v8.a;
 					var updatedEvents = A2(
 						$elm$core$List$map,
 						function (e) {
@@ -7601,11 +7611,11 @@ var $author$project$Main$update = F2(
 				}
 			case 28:
 				var cocktailId = msg.a;
-				var _v8 = model.g;
-				if (_v8.$ === 1) {
+				var _v9 = model.g;
+				if (_v9.$ === 1) {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				} else {
-					var eventId = _v8.a;
+					var eventId = _v9.a;
 					var updatedEvents = A2(
 						$elm$core$List$map,
 						function (e) {
@@ -7680,11 +7690,11 @@ var $author$project$Main$update = F2(
 			default:
 				var cocktailId = msg.a;
 				var newPortions = msg.b;
-				var _v9 = model.g;
-				if (_v9.$ === 1) {
+				var _v10 = model.g;
+				if (_v10.$ === 1) {
 					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 				} else {
-					var eventId = _v9.a;
+					var eventId = _v10.a;
 					var safePortions = A2($elm$core$Basics$max, 1, newPortions);
 					var updatedEvents = A2(
 						$elm$core$List$map,
@@ -7987,7 +7997,7 @@ var $author$project$View$Glossar$categoryItem = F2(
 	});
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$View$Glossar$categoryPanel = function (model) {
-	var _v0 = model.D;
+	var _v0 = model.v;
 	switch (_v0.$) {
 		case 0:
 			return A2(
@@ -8186,6 +8196,15 @@ var $author$project$View$Glossar$columnCocktailList = function (model) {
 			[
 				$author$project$View$Glossar$isSearchActive(model) ? $author$project$View$Glossar$searchResultsPanel(model) : $author$project$View$Glossar$cocktailListPanel(model)
 			]));
+};
+var $author$project$View$Glossar$detailKey = function (model) {
+	var _v0 = model._;
+	if (_v0.$ === 1) {
+		return 'none';
+	} else {
+		var id = _v0.a;
+		return A2($elm$core$Dict$member, id, model.j) ? ('loaded-' + id) : ('loading-' + id);
+	}
 };
 var $elm$html$Html$Attributes$alt = $elm$html$Html$Attributes$stringProperty('alt');
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
@@ -8741,9 +8760,15 @@ var $author$project$View$Glossar$detailPanel = function (model) {
 		}
 	}
 };
+var $elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
+	return _VirtualDom_keyedNode(
+		_VirtualDom_noScript(tag));
+};
+var $elm$html$Html$Keyed$node = $elm$virtual_dom$VirtualDom$keyedNode;
 var $author$project$View$Glossar$columnDetail = function (model) {
-	return A2(
-		$elm$html$Html$div,
+	return A3(
+		$elm$html$Html$Keyed$node,
+		'div',
 		_List_fromArray(
 			[
 				A2($elm$html$Html$Attributes$style, 'flex', '1'),
@@ -8752,7 +8777,9 @@ var $author$project$View$Glossar$columnDetail = function (model) {
 			]),
 		_List_fromArray(
 			[
-				$author$project$View$Glossar$detailPanel(model)
+				_Utils_Tuple2(
+				$author$project$View$Glossar$detailKey(model),
+				$author$project$View$Glossar$detailPanel(model))
 			]));
 };
 var $author$project$View$Glossar$modalBody = function (model) {
@@ -9389,11 +9416,6 @@ var $author$project$View$Home$detailHeader = function (event) {
 					]))
 			]));
 };
-var $elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
-	return _VirtualDom_keyedNode(
-		_VirtualDom_noScript(tag));
-};
-var $elm$html$Html$Keyed$node = $elm$virtual_dom$VirtualDom$keyedNode;
 var $author$project$View$Home$eventDetailView = function (model) {
 	var _v0 = model.g;
 	if (_v0.$ === 1) {

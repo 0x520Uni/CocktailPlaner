@@ -13,10 +13,10 @@ import Types exposing (..)
 
 
 -- LOCAL TYPE
-
-
 -- One row in the shopping table: the summed amount of a single ingredient
 -- after multiplying each cocktail's measure by its portion count.
+
+
 type alias AggregatedIngredient =
     { name : String
     , amount : IngredientAmount
@@ -25,9 +25,9 @@ type alias AggregatedIngredient =
 
 
 -- PACKAGE SIZE PRESETS
-
-
 -- The dropdown options offered to the user for liquid ingredients.
+
+
 presets : List ( Float, String )
 presets =
     [ ( 250, "250 ml" )
@@ -38,8 +38,11 @@ presets =
     ]
 
 
+
 -- Returns the currently selected package size for an ingredient.
 -- Falls back to 700 ml (standard bottle) if the user has not chosen yet.
+
+
 currentPackageSize : String -> Dict String Float -> Float
 currentPackageSize name sizes =
     Dict.get name sizes |> Maybe.withDefault 700
@@ -47,9 +50,9 @@ currentPackageSize name sizes =
 
 
 -- MAIN VIEW
-
-
 -- Entry point called by Main.view.
+
+
 view : Model -> Html Msg
 view model =
     div [ class "section" ]
@@ -60,7 +63,10 @@ view model =
         ]
 
 
+
 -- Decides what to render based on whether an event is open.
+
+
 viewBody : Model -> Html Msg
 viewBody model =
     case model.activeEventId of
@@ -88,7 +94,10 @@ viewBody model =
                     viewEvent model event
 
 
+
 -- Renders the full shopping view for a specific event.
+
+
 viewEvent : Model -> Event -> Html Msg
 viewEvent model event =
     let
@@ -123,7 +132,10 @@ viewEvent model event =
             ]
 
 
+
 -- Renders one table row for a single aggregated ingredient.
+
+
 viewRow : Dict String Float -> AggregatedIngredient -> Html Msg
 viewRow packageSizes agg =
     tr []
@@ -134,8 +146,11 @@ viewRow packageSizes agg =
         ]
 
 
+
 -- Renders the "Packungsgröße" cell.
 -- Liquids get a dropdown; other types get a dash.
+
+
 viewPackageSizeCell : String -> IngredientAmount -> Dict String Float -> Html Msg
 viewPackageSizeCell name amount packageSizes =
     case amount of
@@ -175,9 +190,9 @@ viewPackageSizeCell name amount packageSizes =
 
 
 -- FORMATTING HELPERS
-
-
 -- Formats the "Gesamt" (total needed) column value.
+
+
 formatGesamt : IngredientAmount -> String
 formatGesamt amount =
     case amount of
@@ -191,9 +206,12 @@ formatGesamt amount =
             "—"
 
 
+
 -- Calculates and formats the "Kaufen" (buy) column value.
 -- For liquids: ceiling(total / packageSize) packages.
 -- For pieces: repeat the count. For unknown: "nach Bedarf".
+
+
 formatKaufen : String -> IngredientAmount -> Dict String Float -> String
 formatKaufen name amount packageSizes =
     case amount of
@@ -220,12 +238,12 @@ formatKaufen name amount packageSizes =
 
 
 -- AGGREGATION
-
-
 -- Computes the total amount of each ingredient across all cocktails in the event.
 -- For each EventCocktail: look up the full cocktail, multiply each ingredient's
 -- amount by portions, then sum across all cocktails grouped by ingredient name.
 -- Ingredients missing from the cache (not loaded yet) are silently skipped.
+
+
 computeTotals : Event -> Dict String FullCocktail -> List AggregatedIngredient
 computeTotals event cache =
     let
@@ -268,7 +286,10 @@ computeTotals event cache =
         |> List.sortWith compareIngredients
 
 
+
 -- Multiplies an ingredient amount by the number of portions.
+
+
 scaleAmount : Int -> IngredientAmount -> IngredientAmount
 scaleAmount portions amount =
     let
@@ -286,9 +307,12 @@ scaleAmount portions amount =
             UnknownAmount
 
 
+
 -- Adds two amounts of the same kind together.
 -- If the kinds differ (e.g. one cocktail has "1 oz" and another has "3 pieces"),
 -- we cannot sum them meaningfully and return UnknownAmount.
+
+
 addAmounts : IngredientAmount -> IngredientAmount -> IngredientAmount
 addAmounts a b =
     case ( a, b ) of
@@ -302,7 +326,10 @@ addAmounts a b =
             UnknownAmount
 
 
+
 -- Sort order: LiquidMl < PieceCount < UnknownAmount, then alphabetically within each group.
+
+
 compareIngredients : AggregatedIngredient -> AggregatedIngredient -> Order
 compareIngredients a b =
     case ( a.amount, b.amount ) of

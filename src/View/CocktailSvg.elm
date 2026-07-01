@@ -1,4 +1,4 @@
-module View.CocktailSvg exposing (view, ingredientColors)
+module View.CocktailSvg exposing (ingredientColors, view)
 
 -- SVG measuring cup that shows cocktail ingredient proportions as stacked layers.
 -- The layers are sized by the ingredient's measured amount (not ml — just relative ratios).
@@ -9,10 +9,11 @@ import Svg.Attributes as A
 import Types exposing (Ingredient, Msg)
 
 
+
 -- CONSTANTS
-
-
 -- Glass dimensions inside the SVG viewBox.
+
+
 glassX : Float
 glassX =
     20
@@ -33,7 +34,10 @@ glassHeight =
     200
 
 
+
 -- Colours assigned to ingredients in order. Cycles if there are more than 10.
+
+
 palette : List String
 palette =
     [ "#FF6B6B"
@@ -51,10 +55,10 @@ palette =
 
 
 -- PUBLIC API
-
-
 -- Renders a measuring cup SVG for the given ingredient list.
 -- Width/height are passed so the caller can control layout.
+
+
 view : List Ingredient -> Svg Msg
 view ingredients =
     let
@@ -122,11 +126,11 @@ view ingredients =
 
 
 -- LAYER RENDERING
-
-
 -- Converts the list of (ingredient, ratio, colour) triples into a list of SVG rects.
 -- The first ingredient sits at the BOTTOM of the glass, the last at the TOP,
 -- so we reverse the list before computing cumulative heights.
+
+
 renderLayers : List ( Ingredient, Float, String ) -> List (Svg Msg)
 renderLayers triples =
     let
@@ -183,16 +187,19 @@ renderLayers triples =
 
 
 -- HELPERS
-
-
 -- Returns the list of colours assigned to n ingredients (same order as the SVG layers).
 -- Call this from outside the module to match ingredient tags to SVG band colours.
+
+
 ingredientColors : Int -> List String
 ingredientColors n =
     cyclePalette n
 
 
+
 -- Takes n colours from the palette, cycling if n > length of palette.
+
+
 cyclePalette : Int -> List String
 cyclePalette n =
     let
@@ -210,9 +217,12 @@ cyclePalette n =
         indices
 
 
+
 -- Parses a measure string like "1 1/2 oz" or "2 shots" into a Float.
 -- Only the numeric part matters — units are irrelevant for ratios.
 -- Returns 1.0 when nothing parsable is found.
+
+
 parseMeasure : String -> Float
 parseMeasure raw =
     let
@@ -243,7 +253,10 @@ parseMeasure raw =
                     1.0
 
 
+
 -- Parses a single token: plain integer, decimal, fraction "3/4", or range "6-8".
+
+
 parseToken : String -> Maybe Float
 parseToken rawToken =
     let
@@ -269,7 +282,10 @@ parseToken rawToken =
             Nothing
 
 
+
 -- Only parses slash-fractions like "1/2".
+
+
 parseFraction : String -> Maybe Float
 parseFraction s =
     case String.split "/" s of

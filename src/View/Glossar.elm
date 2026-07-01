@@ -13,11 +13,15 @@ import Dict
 import Html exposing (Html, article, button, div, h2, h3, i, img, input, li, p, span, strong, text, ul)
 import Html.Attributes exposing (alt, class, placeholder, src, style, type_, value)
 import Html.Events exposing (onClick, onInput)
+import Html.Keyed
 import Types exposing (CategoriesState(..), CategoryState(..), CocktailSummary, FullCocktail, Ingredient, Model, Msg(..), Route(..))
 import View.CocktailSvg
 
 
+
 -- Renders the fullscreen modal overlay.
+
+
 view : Model -> Html Msg
 view model =
     div [ class "modal is-active" ]
@@ -39,7 +43,10 @@ view model =
         ]
 
 
+
 -- Header bar: title on the left, search box on the right.
+
+
 modalHeader : Model -> Html Msg
 modalHeader model =
     div
@@ -79,7 +86,10 @@ modalHeader model =
         ]
 
 
+
 -- Three-column body filling the remaining height.
+
+
 modalBody : Model -> Html Msg
 modalBody model =
     div [ style "display" "flex", style "flex" "1", style "overflow" "hidden" ]
@@ -89,7 +99,10 @@ modalBody model =
         ]
 
 
+
 -- Column 1: category list in browse mode; "search results" label in search mode.
+
+
 columnCategories : Model -> Html Msg
 columnCategories model =
     div
@@ -107,7 +120,10 @@ columnCategories model =
         ]
 
 
+
 -- Column 2: cocktail list from category (browse mode) or from search results (search mode).
+
+
 columnCocktailList : Model -> Html Msg
 columnCocktailList model =
     div
@@ -124,24 +140,53 @@ columnCocktailList model =
         ]
 
 
--- Column 3: cocktail detail — unchanged regardless of browse/search mode.
+
+-- Column 3: cocktail detail. The single child is keyed so switching cocktails
+-- replaces the DOM node and re-triggers the entrance animation every time.
+
+
 columnDetail : Model -> Html Msg
 columnDetail model =
-    div
+    Html.Keyed.node "div"
         [ style "flex" "1"
         , style "overflow-y" "auto"
         , class "p-4"
         ]
-        [ detailPanel model ]
+        [ ( detailKey model, detailPanel model ) ]
+
+
+
+-- A key that changes whenever the shown detail changes (selection or load state),
+-- so the keyed node is replaced and the CSS animation restarts on each switch.
+
+
+detailKey : Model -> String
+detailKey model =
+    case model.selectedCocktailId of
+        Nothing ->
+            "none"
+
+        Just id ->
+            if Dict.member id model.cocktailCache then
+                "loaded-" ++ id
+
+            else
+                "loading-" ++ id
+
 
 
 -- True when the user has typed >= 2 characters in the search box.
+
+
 isSearchActive : Model -> Bool
 isSearchActive model =
     String.length model.searchQuery >= 2
 
 
+
 -- Renders the category list based on loading state (browse mode only).
+
+
 categoryPanel : Model -> Html Msg
 categoryPanel model =
     case model.categoriesState of
@@ -158,7 +203,10 @@ categoryPanel model =
             ul [] (List.map (categoryItem model.selectedCategory) names)
 
 
+
 -- A single category item; highlighted when it is the active selection.
+
+
 categoryItem : Maybe String -> String -> Html Msg
 categoryItem selectedCategory name =
     let
@@ -183,7 +231,10 @@ categoryItem selectedCategory name =
     li activeStyle [ text name ]
 
 
+
 -- Renders search results as a cocktail list (search mode).
+
+
 searchResultsPanel : Model -> Html Msg
 searchResultsPanel model =
     if List.isEmpty model.glossarSearchResults then
@@ -193,13 +244,19 @@ searchResultsPanel model =
         ul [] (List.map (cocktailItem model.selectedCocktailId) (List.map fullCocktailToSummary model.glossarSearchResults))
 
 
+
 -- Converts a FullCocktail to a CocktailSummary so we can reuse cocktailItem.
+
+
 fullCocktailToSummary : FullCocktail -> CocktailSummary
 fullCocktailToSummary c =
     { id = c.id, name = c.name, thumbnail = c.thumbnail }
 
 
+
 -- Renders the cocktail list for the selected category (browse mode).
+
+
 cocktailListPanel : Model -> Html Msg
 cocktailListPanel model =
     case model.selectedCategory of
@@ -221,7 +278,10 @@ cocktailListPanel model =
                     ul [] (List.map (cocktailItem model.selectedCocktailId) summaries)
 
 
+
 -- A single cocktail list item; highlighted when selected.
+
+
 cocktailItem : Maybe String -> CocktailSummary -> Html Msg
 cocktailItem selectedId summary =
     let
@@ -245,7 +305,10 @@ cocktailItem selectedId summary =
         [ text summary.name ]
 
 
+
 -- Renders the cocktail detail in column 3.
+
+
 detailPanel : Model -> Html Msg
 detailPanel model =
     case model.selectedCocktailId of
@@ -262,9 +325,12 @@ detailPanel model =
                     cocktailDetail cocktail
 
 
+
 -- Renders the full cocktail card: photo + SVG as a matched pair of framed media
 -- cards, then ingredients and instructions. The whole panel is width-capped via
 -- the "cocktail-detail" class so it stays readable on wide screens.
+
+
 cocktailDetail : FullCocktail -> Html Msg
 cocktailDetail cocktail =
     let
@@ -311,8 +377,11 @@ cocktailDetail cocktail =
         ]
 
 
+
 -- One framed media card: a small uppercase caption above centred content.
 -- Used for both the photo and the SVG so they read as a matched pair.
+
+
 mediaCard : String -> Html Msg -> Html Msg
 mediaCard caption content =
     div [ class "media-card" ]
@@ -321,7 +390,10 @@ mediaCard caption content =
         ]
 
 
+
 -- One ingredient pill: coloured dot + name + measure, matching the SVG band colour.
+
+
 ingredientTag : ( Ingredient, String ) -> Html Msg
 ingredientTag ( ingredient, color ) =
     span

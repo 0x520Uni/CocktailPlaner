@@ -11,7 +11,10 @@ import Json.Encode as E
 import Types exposing (Event, EventCocktail, IngredientAmount(..), Model)
 
 
+
 -- The subset of Model that gets saved and restored.
+
+
 type alias SavedState =
     { events : List Event
     , nextEventId : Int
@@ -19,15 +22,21 @@ type alias SavedState =
     }
 
 
+
 -- Converts the current model into a pretty-printed JSON string.
 -- Called in the Save dialog view to populate the textarea.
+
+
 encodeToString : Model -> String
 encodeToString model =
     E.encode 2 (encodeState model)
 
 
+
 -- Parses a JSON string back into a SavedState.
 -- Returns Err with a human-readable message if the JSON is invalid.
+
+
 parseState : String -> Result String SavedState
 parseState json =
     case D.decodeString stateDecoder json of
@@ -69,7 +78,10 @@ encodeEventCocktail ec =
         ]
 
 
+
 -- Dict String Float has no built-in encoder; we convert to a list of [key, value] pairs.
+
+
 encodeDict : Dict String Float -> E.Value
 encodeDict dict =
     dict
@@ -106,7 +118,10 @@ eventCocktailDecoder =
         (D.field "portions" D.int)
 
 
+
 -- Decodes the [[key, value]] list format back into a Dict.
+
+
 dictDecoder : D.Decoder (Dict String Float)
 dictDecoder =
     D.list pairDecoder

@@ -13,7 +13,10 @@ import Route
 import Types exposing (Dialog(..), Model, Msg(..), Route(..))
 
 
+
 -- Renders the full navbar with brand, hamburger, route links, and action buttons.
+
+
 view : Model -> Html Msg
 view model =
     nav [ class "navbar is-dark" ]
@@ -58,9 +61,12 @@ view model =
         ]
 
 
+
 -- Renders a navbar route link as an <a> tag.
 -- Browser.application intercepts internal href clicks via LinkClicked, so SPA routing works.
 -- Highlighted when the route matches the active one.
+
+
 navLink : Model -> Route -> String -> Html Msg
 navLink model route label =
     let
@@ -78,8 +84,11 @@ navLink model route label =
         [ text label ]
 
 
+
 -- Builds a Bulma icon+text button using a Font Awesome icon class.
 -- faClass example: "fas fa-floppy-disk"
+
+
 iconButton : String -> Msg -> String -> String -> Html Msg
 iconButton btnClass msg faClass label =
     button [ class btnClass, onClick msg ]

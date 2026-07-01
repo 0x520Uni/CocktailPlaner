@@ -129,12 +129,21 @@ update msg model =
 
         NavigateTo route ->
             -- Push a new URL so the browser history stays consistent.
-            -- Set categoriesState to Loading immediately so the UrlChanged that follows doesn't double-fetch.
+            -- Mark categories Loading only when a fetch will actually run, so reopening an
+            -- already-loaded Glossar keeps its list instead of hanging on the spinner.
             let
                 updatedModel =
                     case route of
                         GlossarRoute ->
-                            { model | categoriesState = CategoriesLoading }
+                            case model.categoriesState of
+                                CategoriesNotLoaded ->
+                                    { model | categoriesState = CategoriesLoading }
+
+                                CategoriesFailed ->
+                                    { model | categoriesState = CategoriesLoading }
+
+                                _ ->
+                                    model
 
                         _ ->
                             model

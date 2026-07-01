@@ -12,9 +12,9 @@ import Url exposing (Url)
 
 
 -- ROUTING
-
-
 -- The three top-level pages of the app (ADR-0007).
+
+
 type Route
     = HomeRoute
     | ShoppingRoute
@@ -23,10 +23,10 @@ type Route
 
 
 -- PERSISTENCE DIALOGS
-
-
 -- Controls which modal dialog is currently open (ADR-0002).
 -- CreateEventDialog is for the new-event form; editing happens inline in the detail panel.
+
+
 type Dialog
     = NoDialog
     | SaveDialog
@@ -36,10 +36,10 @@ type Dialog
 
 
 -- COCKTAIL DATA
-
-
 -- Lightweight cocktail info returned by filter.php (category endpoint).
 -- Only has name, ID, and thumbnail — no recipe.
+
+
 type alias CocktailSummary =
     { id : String
     , name : String
@@ -47,8 +47,11 @@ type alias CocktailSummary =
     }
 
 
+
 -- Full cocktail data returned by lookup.php or search.php.
 -- Ingredients are already converted to ml when this is stored in the cache (ADR-0008).
+
+
 type alias FullCocktail =
     { id : String
     , name : String
@@ -58,17 +61,23 @@ type alias FullCocktail =
     }
 
 
+
 -- What kind of measurable quantity an ingredient has.
 -- Determined at decode time by Api.parseMeasureToAmount.
+
+
 type IngredientAmount
     = LiquidMl Float -- converted to ml: oz, cl, tsp, shot, dash, cup, etc.
     | PieceCount Float -- plain count: "3" limes, "5" mint leaves
     | UnknownAmount -- garnish ("Garnish with"), "Top", or unparsable measure
 
 
+
 -- One ingredient of a cocktail.
 -- measure keeps the raw API string for display in the Glossar and SVG.
 -- amount is the parsed quantity, ready for shopping-list calculations.
+
+
 type alias Ingredient =
     { name : String
     , measure : String
@@ -76,15 +85,21 @@ type alias Ingredient =
     }
 
 
+
 -- Loading state for a single category in the Glossar tree.
+
+
 type CategoryState
     = Loading
     | Loaded (List CocktailSummary)
     | Failed
 
 
+
 -- Loading state for the top-level list of category names.
 -- Fetched once from list.php?c=list when the Glossar opens.
+
+
 type CategoriesState
     = CategoriesNotLoaded
     | CategoriesLoading
@@ -94,9 +109,9 @@ type CategoriesState
 
 
 -- EVENT PLANNING
-
-
 -- A cocktail bar event with a name, expected guest count, and a list of cocktails to serve.
+
+
 type alias Event =
     { id : String
     , name : String
@@ -105,7 +120,10 @@ type alias Event =
     }
 
 
+
 -- One cocktail entry inside an event: which cocktail and how many portions to serve.
+
+
 type alias EventCocktail =
     { cocktailId : String
     , portions : Int
@@ -114,9 +132,9 @@ type alias EventCocktail =
 
 
 -- MODEL
-
-
 -- The full application state.
+
+
 type alias Model =
     { key : Nav.Key -- needed to push URL changes (ADR-0003)
     , route : Route -- which top-level page is active
@@ -145,10 +163,10 @@ type alias Model =
 
 
 -- MSG
-
-
 -- All events the application can react to.
 -- HTTP responses, user interactions, and URL changes all flow through here.
+
+
 type Msg
     = -- URL events (ADR-0003)
       UrlChanged Url

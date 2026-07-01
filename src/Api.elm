@@ -1,4 +1,4 @@
-module Api exposing (fetchCategories, fetchCocktailsByCategory, fetchCocktailById, searchCocktailsByName)
+module Api exposing (fetchCategories, fetchCocktailById, fetchCocktailsByCategory, searchCocktailsByName)
 
 -- HTTP commands for TheCocktailDB API.
 -- Each function returns a Cmd Msg that the runtime executes.
@@ -12,11 +12,11 @@ import Url
 
 
 -- CATEGORY LIST
-
-
 -- Fetches all available category names from TheCocktailDB.
 -- Endpoint: list.php?c=list
 -- Response: { "drinks": [{ "strCategory": "Cocktail" }, ...] }
+
+
 fetchCategories : Cmd Msg
 fetchCategories =
     Http.get
@@ -25,7 +25,10 @@ fetchCategories =
         }
 
 
+
 -- Decodes the list.php response into a plain list of category name strings.
+
+
 categoriesDecoder : Decoder (List String)
 categoriesDecoder =
     Decode.field "drinks"
@@ -34,12 +37,12 @@ categoriesDecoder =
 
 
 -- COCKTAIL LIST BY CATEGORY
-
-
 -- Fetches the cocktails belonging to one category.
 -- Endpoint: filter.php?c=<category>
 -- Response: { "drinks": [{ "strDrink": "...", "strDrinkThumb": "...", "idDrink": "..." }, ...] }
 -- Note: only summary data — no ingredients or recipe.
+
+
 fetchCocktailsByCategory : String -> Cmd Msg
 fetchCocktailsByCategory category =
     Http.get
@@ -48,7 +51,10 @@ fetchCocktailsByCategory category =
         }
 
 
+
 -- Decodes the filter.php response into a list of CocktailSummary records.
+
+
 cocktailSummariesDecoder : Decoder (List CocktailSummary)
 cocktailSummariesDecoder =
     Decode.field "drinks"
@@ -63,11 +69,11 @@ cocktailSummariesDecoder =
 
 
 -- FULL COCKTAIL BY ID
-
-
 -- Fetches the complete recipe for one cocktail.
 -- Endpoint: lookup.php?i=<id>
 -- Response: { "drinks": [{ full cocktail object }] }
+
+
 fetchCocktailById : String -> Cmd Msg
 fetchCocktailById id =
     Http.get
@@ -76,7 +82,10 @@ fetchCocktailById id =
         }
 
 
+
 -- Decodes the lookup.php response — takes the first element of the "drinks" array.
+
+
 fullCocktailDecoder : Decoder FullCocktail
 fullCocktailDecoder =
     Decode.field "drinks" (Decode.index 0 drinkObjectDecoder)
@@ -84,13 +93,13 @@ fullCocktailDecoder =
 
 
 -- COCKTAIL SEARCH BY NAME
-
-
 -- Searches for cocktails by name.
 -- Endpoint: search.php?s=<name>
 -- Response: { "drinks": [ full cocktail objects ... ] } or { "drinks": null } if no match.
 -- The caller supplies the Msg constructor so the same function works for both
 -- the event cocktail search (GotEventSearchResults) and the Glossar search (GotGlossarSearchResults).
+
+
 searchCocktailsByName : String -> (Result Http.Error (List FullCocktail) -> Msg) -> Cmd Msg
 searchCocktailsByName query toMsg =
     Http.get
@@ -99,8 +108,11 @@ searchCocktailsByName query toMsg =
         }
 
 
+
 -- Decodes the search.php response.
 -- The API returns { "drinks": null } when nothing matches, so we handle null → empty list.
+
+
 searchResultsDecoder : Decoder (List FullCocktail)
 searchResultsDecoder =
     Decode.field "drinks"
@@ -113,10 +125,10 @@ searchResultsDecoder =
 
 
 -- SHARED DRINK DECODER
-
-
 -- Decodes a single drink object from the API (used by both lookup.php and search.php).
 -- Extracted so it can be used inside both a single-item and a list context.
+
+
 drinkObjectDecoder : Decoder FullCocktail
 drinkObjectDecoder =
     Decode.map5 FullCocktail
@@ -127,9 +139,12 @@ drinkObjectDecoder =
         (Decode.field "strInstructions" Decode.string)
 
 
+
 -- The API stores ingredients in numbered fields: strIngredient1…strIngredient15
 -- with matching strMeasure1…strMeasure15. This decoder walks all 15 slots,
 -- skips empty/null ones, and builds a clean list.
+
+
 ingredientsDecoder : Decoder (List Ingredient)
 ingredientsDecoder =
     Decode.value
@@ -179,11 +194,11 @@ ingredientsDecoder =
 
 
 -- MEASURE-TO-AMOUNT CONVERSION
-
-
 -- Converts a raw API measure string ("1 1/2 oz", "2 cl", "3") to an IngredientAmount.
 -- Strategy: detect the unit keyword first, then extract the leading number and multiply.
 -- Units are checked longest-first to avoid "tsp" matching inside "tbsp".
+
+
 parseMeasureToAmount : String -> IngredientAmount
 parseMeasureToAmount raw =
     let
@@ -245,9 +260,12 @@ parseMeasureToAmount raw =
                 UnknownAmount
 
 
+
 -- Extracts the leading numeric value from a measure string.
 -- Handles: integers, decimals, fractions ("3/4"), mixed numbers ("1 1/2"),
 -- and ranges ("6-8" → lower bound 6).
+
+
 extractLeadingNumber : String -> Maybe Float
 extractLeadingNumber raw =
     case String.words (String.trim raw) of
@@ -274,8 +292,11 @@ extractLeadingNumber raw =
                     Nothing
 
 
+
 -- Parses a single numeric token: plain number, decimal, fraction "3/4",
 -- or range "6-8" (returns lower bound).
+
+
 parseNumericToken : String -> Maybe Float
 parseNumericToken rawToken =
     let
@@ -299,7 +320,10 @@ parseNumericToken rawToken =
             Nothing
 
 
+
 -- Parses only slash-fractions like "1/2". Returns Nothing for everything else.
+
+
 parseFractionToken : String -> Maybe Float
 parseFractionToken s =
     case String.split "/" s of
