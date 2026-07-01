@@ -67,6 +67,29 @@
   max-width: 100%;
 }
 
+/* Small per-row ratio glass in the event cocktail table. Fixed compact box so the
+   SVG (which is height:100%, width:auto) stays thumbnail-sized and rows stay tight. */
+.row-glass {
+  width: 34px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.row-glass svg {
+  height: 100%;
+  width: auto;
+}
+
+/* Placeholder shown while a recipe is still loading: an empty dashed glass frame. */
+.row-glass-empty {
+  border: 1.5px dashed #d0d5dd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
 /* Ingredient tags: wrap neatly and align the coloured dot with the text. */
 .tags .tag {
   align-items: center;
