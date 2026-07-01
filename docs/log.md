@@ -81,3 +81,4 @@ Skip: single-line edits, typo fixes, reformatting.
 | 2026-07-01 | FIX | MEDIUM | fetchMissingRecipes: fehlende Rezepte nach 'Projekt laden' nachladen, damit Namen, Glaeser und Einkaufsliste befuellt werden |
 | 2026-07-01 | DOCS | MEDIUM | KB-Sync: ADR-0007 (CP-A-15) + ADR-Zusammenfassung (CP-A-13) auf Hash/Fragment-Routing aktualisiert; Notiz zu fetchMissingRecipes bei ADR-0008 |
 | 2026-07-01 | DOCS | LOW | Save/Load per Playwright getestet (8 Szenarien: Serialisierung, Round-Trip nach Reload inkl. fetchMissingRecipes, ungültiges JSON, Überschreib-Warnung, Multi-Event, Portionen-/Namenstreue, nextEventId-Kollision, Einkaufsliste aus geladenem Event) — alle bestanden |
+| 2026-07-01 | IMPL | MEDIUM | Deploy: Hash-Routing + Mini-Glas + fetchMissingRecipes live; Narrativ/PDFs/Routing-Diagramm regeneriert; gh-pages aktualisiert |
