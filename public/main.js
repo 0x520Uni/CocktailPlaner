@@ -8436,9 +8436,31 @@ var $elm$svg$Svg$Attributes$fontSize = _VirtualDom_attribute('font-size');
 var $elm$svg$Svg$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$svg$Svg$Attributes$textAnchor = _VirtualDom_attribute('text-anchor');
 var $elm$svg$Svg$text_ = $elm$svg$Svg$trustedNode('text');
-var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var $elm$svg$Svg$Attributes$x = _VirtualDom_attribute('x');
 var $elm$svg$Svg$Attributes$y = _VirtualDom_attribute('y');
+var $author$project$View$CocktailSvg$bandText = F5(
+	function (cx, cy, size, colour, content) {
+		return A2(
+			$elm$svg$Svg$text_,
+			_List_fromArray(
+				[
+					$elm$svg$Svg$Attributes$x(
+					$elm$core$String$fromFloat(cx)),
+					$elm$svg$Svg$Attributes$y(
+					$elm$core$String$fromFloat(cy)),
+					$elm$svg$Svg$Attributes$textAnchor('middle'),
+					$elm$svg$Svg$Attributes$fontSize(
+					$elm$core$String$fromInt(size)),
+					$elm$svg$Svg$Attributes$fill(colour),
+					$elm$svg$Svg$Attributes$fontFamily('sans-serif')
+				]),
+			_List_fromArray(
+				[
+					$elm$svg$Svg$text(content)
+				]));
+	});
+var $elm$core$Basics$round = _Basics_round;
+var $elm$svg$Svg$Attributes$width = _VirtualDom_attribute('width');
 var $author$project$View$CocktailSvg$renderLayers = function (triples) {
 	var reversed = $elm$core$List$reverse(triples);
 	var go = F3(
@@ -8453,6 +8475,8 @@ var $author$project$View$CocktailSvg$renderLayers = function (triples) {
 					var ratio = _v1.b;
 					var colour = _v1.c;
 					var rest = remaining.b;
+					var percentLabel = $elm$core$String$fromInt(
+						$elm$core$Basics$round(ratio * 100)) + '%';
 					var layerHeight = ratio * $author$project$View$CocktailSvg$glassHeight;
 					var yTop = (($author$project$View$CocktailSvg$glassY + $author$project$View$CocktailSvg$glassHeight) - yFromBottom) - layerHeight;
 					var layerRect = A2(
@@ -8470,26 +8494,16 @@ var $author$project$View$CocktailSvg$renderLayers = function (triples) {
 								$elm$svg$Svg$Attributes$fill(colour)
 							]),
 						_List_Nil);
-					var labelNodes = (layerHeight >= 18) ? _List_fromArray(
+					var centerY = yTop + (layerHeight / 2);
+					var centerX = $author$project$View$CocktailSvg$glassX + ($author$project$View$CocktailSvg$glassWidth / 2);
+					var labelNodes = (layerHeight >= 28) ? _List_fromArray(
 						[
-							A2(
-							$elm$svg$Svg$text_,
-							_List_fromArray(
-								[
-									$elm$svg$Svg$Attributes$x(
-									$elm$core$String$fromFloat($author$project$View$CocktailSvg$glassX + ($author$project$View$CocktailSvg$glassWidth / 2))),
-									$elm$svg$Svg$Attributes$y(
-									$elm$core$String$fromFloat((yTop + (layerHeight / 2)) + 4)),
-									$elm$svg$Svg$Attributes$textAnchor('middle'),
-									$elm$svg$Svg$Attributes$fontSize('10'),
-									$elm$svg$Svg$Attributes$fill('rgba(0,0,0,0.75)'),
-									$elm$svg$Svg$Attributes$fontFamily('sans-serif')
-								]),
-							_List_fromArray(
-								[
-									$elm$svg$Svg$text(ingredient.a4)
-								]))
-						]) : _List_Nil;
+							A5($author$project$View$CocktailSvg$bandText, centerX, centerY - 2, 10, 'rgba(0,0,0,0.8)', ingredient.a4),
+							A5($author$project$View$CocktailSvg$bandText, centerX, centerY + 11, 8, 'rgba(0,0,0,0.55)', percentLabel)
+						]) : ((layerHeight >= 18) ? _List_fromArray(
+						[
+							A5($author$project$View$CocktailSvg$bandText, centerX, centerY + 4, 10, 'rgba(0,0,0,0.75)', ingredient.a4)
+						]) : _List_Nil);
 					var $temp$remaining = rest,
 						$temp$yFromBottom = yFromBottom + layerHeight,
 						$temp$acc = _Utils_ap(
@@ -10101,7 +10115,6 @@ var $author$project$View$Shopping$computeTotals = F2(
 				},
 				$elm$core$Dict$toList(grouped)));
 	});
-var $elm$core$Basics$round = _Basics_round;
 var $author$project$View$Shopping$formatGesamt = function (amount) {
 	switch (amount.$) {
 		case 0:

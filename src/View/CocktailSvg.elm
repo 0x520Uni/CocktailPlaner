@@ -163,19 +163,28 @@ renderLayers triples =
                                 ]
                                 []
 
-                        -- Only draw the label if the band is tall enough to read.
+                        -- Centre of the band; both labels are anchored to it.
+                        centerX =
+                            glassX + glassWidth / 2
+
+                        centerY =
+                            yTop + layerHeight / 2
+
+                        -- The computed share of the glass, shown so the viewer can see the
+                        -- heights are calculated from the recipe data (not drawn by hand).
+                        percentLabel =
+                            String.fromInt (round (ratio * 100)) ++ "%"
+
+                        -- Tall bands show name + percentage; medium bands only the name;
+                        -- tiny bands stay empty so the glass does not get cluttered.
                         labelNodes =
-                            if layerHeight >= 18 then
-                                [ text_
-                                    [ A.x (String.fromFloat (glassX + glassWidth / 2))
-                                    , A.y (String.fromFloat (yTop + layerHeight / 2 + 4))
-                                    , A.textAnchor "middle"
-                                    , A.fontSize "10"
-                                    , A.fill "rgba(0,0,0,0.75)"
-                                    , A.fontFamily "sans-serif"
-                                    ]
-                                    [ text ingredient.name ]
+                            if layerHeight >= 28 then
+                                [ bandText centerX (centerY - 2) 10 "rgba(0,0,0,0.8)" ingredient.name
+                                , bandText centerX (centerY + 11) 8 "rgba(0,0,0,0.55)" percentLabel
                                 ]
+
+                            else if layerHeight >= 18 then
+                                [ bandText centerX (centerY + 4) 10 "rgba(0,0,0,0.75)" ingredient.name ]
 
                             else
                                 []
@@ -187,6 +196,24 @@ renderLayers triples =
 
 
 -- HELPERS
+-- One centred text label inside a band, reused for the ingredient name and the
+-- percentage so both share the same anchoring and font family.
+
+
+bandText : Float -> Float -> Int -> String -> String -> Svg Msg
+bandText cx cy size colour content =
+    text_
+        [ A.x (String.fromFloat cx)
+        , A.y (String.fromFloat cy)
+        , A.textAnchor "middle"
+        , A.fontSize (String.fromInt size)
+        , A.fill colour
+        , A.fontFamily "sans-serif"
+        ]
+        [ text content ]
+
+
+
 -- Returns the list of colours assigned to n ingredients (same order as the SVG layers).
 -- Call this from outside the module to match ingredient tags to SVG band colours.
 
