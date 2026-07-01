@@ -445,6 +445,13 @@
     animation: pour 0.7s ease-out both;
   }
 
+  /* Detail panel: fades + rises in on every cocktail switch. The keyed node in
+     Glossar.elm is replaced per selection, so this entrance re-fires each time;
+     together with the SVG "pour" the whole card re-animates on switch. */
+  .cocktail-detail {
+    animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
   /* Loading / info notifications: a slow breathing pulse so async states read
      as "working" rather than frozen. */
   .notification.is-info,
@@ -462,6 +469,7 @@
   .modal-card,
   .modal .box,
   .media-frame svg g[clip-path],
+  .cocktail-detail,
   .event-empty-icon,
   .notification.is-info,
   .notification.is-warning,
