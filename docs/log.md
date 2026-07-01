@@ -84,3 +84,4 @@ Skip: single-line edits, typo fixes, reformatting.
 | 2026-07-01 | IMPL | MEDIUM | Deploy: Hash-Routing + Mini-Glas + fetchMissingRecipes live; Narrativ/PDFs/Routing-Diagramm regeneriert; gh-pages aktualisiert |
 | 2026-07-01 | FIX | MEDIUM | Glossar-Reopen-Bug behoben: NavigateTo setzt categoriesState nur bei NotLoaded/Failed auf Loading, sonst hing das zweite Öffnen dauerhaft auf 'Wird geladen...' (Playwright verifiziert) |
 | 2026-07-01 | FEATURE | MEDIUM | Cocktail-Detail animiert bei jedem Wechsel: Html.Keyed.node in Glossar columnDetail (Key aus Auswahl+Cache-Zustand) ersetzt den DOM-Knoten, pop-in + SVG-pour feuern neu; .cocktail-detail Entrance in style.css (+reduced-motion) |
+| 2026-07-01 | IMPL | LOW | Deploy (reduziert): Glossar-Reopen-Fix + Wechsel-Animation live auf gh-pages; KB/Diagramme/Narrativ übersprungen (nicht betroffen) |
